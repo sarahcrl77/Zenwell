@@ -1,23 +1,23 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenWell | Dashboard Sanctuaire</title>
+    <title>ZenWell | Dashboard Officiel</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Geist:wght@400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* SYSTÈME DE DESIGN ZENWELL */
         :root {
             --obsidienne: #252525;
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
             --eucalyptus: #D1E1D6;
-            --noir: #121212;
-            --grain: rgba(255, 255, 255, 0.03);
+            --noir: #000000;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,209 +28,295 @@
             font-family: 'Geist', sans-serif;
             display: flex;
             min-height: 100vh;
-            background-image: url("https://www.transparenttextures.com/patterns/stardust.png"); /* Effet grain argentique */
+            /* Texture grain argentique demandée dans la charte */
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
         }
 
-        /* Sidebar */
-        nav {
-            width: 260px;
+        /* SIDEBAR */
+        aside {
+            width: 280px;
             background: var(--noir);
             border-right: 1px solid rgba(231, 253, 230, 0.1);
             display: flex;
             flex-direction: column;
-            padding: 2rem;
+            padding: 2.5rem 1.5rem;
             position: fixed;
             height: 100vh;
+            z-index: 100;
         }
 
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4rem;
+        }
+
+        /* Logo ZenWell fidèle au symbole officiel */
+        .logo-symbol {
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--sunlight);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-symbol::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--sunlight);
+            border-radius: 50%;
+        }
+
+        .logo-text {
             font-family: 'Outfit', sans-serif;
-            color: var(--sunlight);
-            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 3rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 1.4rem;
+            color: var(--cloud, #EEEDE8);
+            letter-spacing: 1px;
         }
 
-        .nav-links { list-style: none; }
-        .nav-links li { margin-bottom: 1.5rem; }
-        .nav-links a {
-            color: var(--eucalyptus);
+        .nav-menu { list-style: none; flex-grow: 1; }
+        .nav-item { margin-bottom: 0.8rem; }
+        .nav-link {
             text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-            display: block;
-            padding: 0.5rem;
-            border-radius: 4px;
+            color: var(--eucalyptus);
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
         }
-        .nav-links a:hover { color: var(--sunlight); background: rgba(254, 250, 143, 0.05); }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(254, 250, 143, 0.1);
+            color: var(--sunlight);
+        }
 
-        /* Main Content */
+        /* MAIN CONTENT */
         main {
-            margin-left: 260px;
-            flex: 1;
+            margin-left: 280px;
+            flex-grow: 1;
             padding: 3rem;
+            max-width: 1400px;
         }
 
-        header {
+        .header-top {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
+            align-items: flex-start;
+            margin-bottom: 3.5rem;
         }
 
-        h1 { font-family: 'Outfit', sans-serif; color: var(--menthe); font-size: 2rem; }
-        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.2rem; }
+        h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; color: var(--menthe); margin-bottom: 0.5rem; }
+        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.3rem; }
 
-        /* Grille KPI */
-        .stats-grid {
+        /* BOUTONS D'ACTION */
+        .btn-primary {
+            background: var(--sunlight);
+            color: var(--noir);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(254, 250, 143, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(254, 250, 143, 0.4);
+        }
+
+        /* KPI CARDS */
+        .grid-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
         .card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(231, 253, 230, 0.1);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .card h3 { font-size: 0.8rem; text-transform: uppercase; color: var(--eucalyptus); margin-bottom: 1rem; }
-        .card .value { font-family: 'Outfit', sans-serif; font-size: 2rem; color: var(--sunlight); }
-
-        /* Status Cloud */
-        .status-badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(231, 253, 230, 0.08);
+            padding: 2rem;
             border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            background: #1b4332;
-            color: #d8f3dc;
-            border: 1px solid #2d6a4f;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Table */
+        .card h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; color: var(--eucalyptus); }
+        .card .value { font-family: 'Outfit', sans-serif; font-size: 2.8rem; color: var(--sunlight); font-weight: 700; }
+
+        /* INFRASTRUCTURE STATUS */
+        .infra-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .status-pill {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background: #1b4332;
+            color: #E7FDE6;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid var(--menthe);
+        }
+
+        /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 2rem;
-            background: rgba(255,255,255,0.02);
-            border-radius: 12px;
-            overflow: hidden;
         }
+        th { text-align: left; padding: 1.2rem; color: var(--sunlight); font-family: 'Outfit'; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        th { color: var(--sunlight); font-family: 'Outfit', sans-serif; }
-
-        @media (max-width: 768px) {
-            nav { width: 70px; padding: 1rem; }
-            .nav-links span, .logo span { display: none; }
-            main { margin-left: 70px; }
-        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">Z<span>ENWELL</span></div>
-        <ul class="nav-links">
-            <li><a href="#">🏠 <span>Dashboard</span></a></li>
-            <li><a href="#">📅 <span>Réservations</span></a></li>
-            <li><a href="#">👥 <span>Membres</span></a></li>
-            <li><a href="#">⚙️ <span>Infrastructure</span></a></li>
+    <aside>
+        <div class="logo-container">
+            <div class="logo-symbol"></div>
+            <div class="logo-text">zenwell</div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#" class="nav-link active"><span>🏠</span> Dashboard</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><span>📅</span> Réservations</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><span>📈</span> Revenus</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><span>☁️</span> Google Cloud</a></li>
         </ul>
-        <div class="quote" style="margin-top: auto;">"L'équilibre est un mouvement."</div>
-    </nav>
+
+        <div class="quote">"L'équilibre ne se calcule pas, il se ressent."</div>
+    </aside>
 
     <main>
-        <header>
+        <div class="header-top">
             <div>
-                <h1>Console de Gestion</h1>
-                <p>Bienvenue dans votre sanctuaire digital.</p>
+                <h1>Tableau de bord</h1>
+                <p>Analyse de votre état somatique et digital.</p>
             </div>
-            <div class="card" style="padding: 0.8rem;">
-                <span class="status-badge">GCP RUN: ACTIVE</span>
-                <span class="status-badge">SQL: CONNECTED</span>
-            </div>
-        </header>
+            <button class="btn-primary" onclick="alert('Nouvelle session initialisée')">+ Nouvelle Session</button>
+        </div>
 
-        <section class="stats-grid">
+        <div class="grid-stats">
             <div class="card">
-                <h3>Utilisateurs Totaux</h3>
-                <div class="value">1,402</div>
+                <h3>Utilisateurs Actifs</h3>
+                <div class="value" id="count-users">1,284</div>
             </div>
             <div class="card">
-                <h3>Réservations / mois</h3>
-                <div class="value">584</div>
+                <h3>Séances ce jour</h3>
+                <div class="value">42</div>
             </div>
             <div class="card">
-                <h3>Revenu (EUR)</h3>
-                <div class="value">12,450€</div>
+                <h3>Chiffre d'Affaires</h3>
+                <div class="value">12.4k€</div>
             </div>
-        </section>
+        </div>
 
-        <section class="card">
-            <h2 style="font-family: 'Outfit'; margin-bottom: 1rem;">Activité du Cloud</h2>
-            <canvas id="zenChart" style="max-height: 300px;"></canvas>
-        </section>
+        <div class="infra-grid">
+            <div class="card">
+                <h3 style="color: var(--sunlight);">Activité Hebdomadaire</h3>
+                <canvas id="mainChart" height="150"></canvas>
+            </div>
 
-        <section>
+            <div class="card">
+                <h3 style="color: var(--sunlight);">Statut Cloud GCP</h3>
+                <div class="status-pill">
+                    <span>Cloud Run</span>
+                    <span class="badge">ACTIVE</span>
+                </div>
+                <div class="status-pill">
+                    <span>Cloud SQL</span>
+                    <span class="badge">CONNECTED</span>
+                </div>
+                <div class="status-pill">
+                    <span>Storage</span>
+                    <span class="badge">OK</span>
+                </div>
+                <button class="btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.6rem; font-size: 0.8rem;">Monitorer</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h3 style="color: var(--sunlight);">Derniers Membres</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Membre</th>
+                        <th>Nom</th>
                         <th>Session</th>
-                        <th>Statut</th>
-                        <th>Instance</th>
+                        <th>Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Alice Martin</td>
-                        <td>Yoga Vinyasa</td>
-                        <td><span class="status-badge">Confirmé</span></td>
-                        <td>cloud-run-01</td>
+                        <td>Jean Dupont</td>
+                        <td>Yoga Sculpt</td>
+                        <td>02/04/2026</td>
+                        <td><button style="background:none; border:1px solid var(--sunlight); color:var(--sunlight); padding:4px 10px; border-radius:4px; cursor:pointer;">Détails</button></td>
                     </tr>
                     <tr>
-                        <td>Marc Durand</td>
-                        <td>Méditation Somatique</td>
-                        <td><span class="status-badge">Confirmé</span></td>
-                        <td>cloud-run-01</td>
+                        <td>Sophie Martin</td>
+                        <td>Méditation IA</td>
+                        <td>02/04/2026</td>
+                        <td><button style="background:none; border:1px solid var(--sunlight); color:var(--sunlight); padding:4px 10px; border-radius:4px; cursor:pointer;">Détails</button></td>
                     </tr>
                 </tbody>
             </table>
-        </section>
+        </div>
     </main>
 
     <script>
-        // Configuration du graphique avec les couleurs ZenWell
-        const ctx = document.getElementById('zenChart').getContext('2d');
+        // Graphique ZenWell
+        const ctx = document.getElementById('mainChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
                 datasets: [{
-                    label: 'Trafic Utilisateurs',
-                    data: [12, 19, 15, 25, 22, 35, 30],
+                    label: 'Trafic',
+                    data: [45, 52, 48, 70, 65, 90, 85],
                     borderColor: '#FEFA8F',
-                    backgroundColor: 'rgba(254, 250, 143, 0.1)',
+                    backgroundColor: 'rgba(254, 250, 143, 0.05)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3
                 }]
             },
             options: {
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#D1E1D6' } },
+                    y: { display: false },
                     x: { grid: { display: false }, ticks: { color: '#D1E1D6' } }
                 }
             }
         });
+
+        // Animation simple pour les chiffres
+        setInterval(() => {
+            const el = document.getElementById('count-users');
+            let val = parseInt(el.innerText.replace(',', ''));
+            el.innerText = (val + Math.floor(Math.random() * 3)).toLocaleString();
+        }, 3000);
     </script>
 </body>
 </html>
