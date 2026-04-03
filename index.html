@@ -3,429 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenWell | Digital Sanctuary Platform</title>
+    <title>ZenWell | Console de Gestion</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Geist:wght@300;400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Geist:wght@400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            /* Palette Officielle ZenWell */
             --obsidienne: #252525;
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
             --eucalyptus: #D1E1D6;
-            --cloud: #EEEDE8;
             --noir: #000000;
-            
-            /* UI Constants */
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(231, 253, 230, 0.08);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow: 0 20px 40px rgba(0,0,0,0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--obsidienne);
-            color: var(--cloud);
+            color: var(--eucalyptus);
             font-family: 'Geist', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            /* Texture grain argentique lourde (Charte p.29) */
+            display: flex;
+            min-height: 100vh;
+            /* Nouveau fond : Grain argentique lourd (Page 29 de la charte) */
             background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+            overflow-x: hidden;
         }
 
-        /* LAYOUT ARCHITECTURE */
-        .app-shell {
-            display: grid;
-            grid-template-columns: 80px 1fr 380px; /* Sidebar | Main | Admin Panel */
-            height: 100vh;
-            gap: 0;
+        /* Effet de lumière "Clair-Obscur" (Light Semantic) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, rgba(231, 253, 230, 0.05) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        /* 1. SIDEBAR (Navigation Icons Only) */
-        aside.nav-rail {
+        /* Sidebar */
+        nav {
+            width: 280px;
             background: var(--noir);
-            border-right: 1px solid var(--border);
+            border-right: 1px solid rgba(231, 253, 230, 0.1);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 2rem 0;
-            z-index: 100;
+            padding: 2.5rem;
+            position: fixed;
+            height: 100vh;
+            z-index: 10;
         }
 
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--sunlight);
-            border-radius: 50%;
+        /* Logo ZenWell Officiel (Symbole Cercle + Croix) */
+        .logo-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 3rem;
-        }
-        .brand-logo::after {
-            content: '';
-            width: 12px; height: 12px;
-            background: var(--sunlight);
-            border-radius: 50%;
+            gap: 12px;
+            margin-bottom: 4rem;
         }
 
-        .nav-icon {
+        .logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            color: var(--sunlight);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+        }
+
+        .nav-links { list-style: none; }
+        .nav-links li { margin-bottom: 1rem; }
+        .nav-links a {
             color: var(--eucalyptus);
-            margin-bottom: 2rem;
-            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
             transition: var(--transition);
-            opacity: 0.5;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
         }
-        .nav-icon:hover, .nav-icon.active { opacity: 1; color: var(--sunlight); }
-
-        /* 2. CLIENT DASHBOARD (Center Focus) */
-        main.client-view {
-            padding: 2.5rem;
-            overflow-y: auto;
-            background: radial-gradient(circle at top right, rgba(231, 253, 230, 0.03), transparent);
+        .nav-links a:hover { 
+            color: var(--sunlight); 
+            background: rgba(254, 250, 143, 0.05);
+            transform: translateX(5px);
         }
 
-        .header-section {
+        /* Main Content */
+        main {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3.5rem;
+            max-width: 1400px;
+        }
+
+        header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            margin-bottom: 4rem;
+        }
+
+        h1 { font-family: 'Outfit', sans-serif; color: var(--menthe); font-size: 2.5rem; font-weight: 700; }
+        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.4rem; margin-top: 0.5rem; }
+
+        /* Grille KPI */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
-        h1 { font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 700; color: var(--cloud); }
-        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.4rem; margin-top: 0.5rem; }
-
-        /* Activity Rings (Smartwatch Integration) */
-        .rings-container {
-            display: flex;
-            gap: 2rem;
-            background: var(--glass);
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            margin-bottom: 2.5rem;
-        }
-
-        .ring-stat { display: flex; align-items: center; gap: 1rem; }
-        .ring-visual {
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            border: 5px solid var(--obsidienne);
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        .ring-visual svg { position: absolute; transform: rotate(-90deg); }
-        .ring-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--eucalyptus); }
-        .ring-value { font-family: 'Outfit'; font-weight: 700; font-size: 1.2rem; color: var(--menthe); }
-
-        /* Grid System */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .glass-card {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+        .card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(231, 253, 230, 0.08);
             padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(254, 250, 143, 0.2); }
-
-        .card-title {
-            font-family: 'Outfit';
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transition: var(--transition);
         }
 
-        /* Booking Cards */
-        .booking-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: var(--radius-md);
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--sunlight);
-        }
-        .booking-time { font-family: 'Outfit'; font-weight: 700; color: var(--sunlight); min-width: 60px; }
-
-        /* 3. ADMIN DASHBOARD (Right Panel) */
-        aside.admin-view {
-            background: var(--noir);
-            border-left: 1px solid var(--border);
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+        .card:hover {
+            border-color: rgba(254, 250, 143, 0.3);
+            transform: translateY(-5px);
         }
 
-        .admin-section-title {
-            font-family: 'Outfit';
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: var(--menthe);
-            margin-bottom: 1rem;
-            display: block;
-        }
+        .card h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--eucalyptus); margin-bottom: 1.5rem; opacity: 0.7; }
+        .card .value { font-family: 'Outfit', sans-serif; font-size: 2.8rem; color: var(--sunlight); font-weight: 700; }
 
-        .user-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--eucalyptus); }
-        .user-info span { display: block; font-size: 0.85rem; }
-        .user-status { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; }
-
-        .metric-mini {
-            background: var(--obsidienne);
-            padding: 1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-        }
-        .metric-mini .label { font-size: 0.7rem; color: var(--eucalyptus); }
-        .metric-mini .val { font-family: 'Outfit'; font-size: 1.2rem; color: var(--sunlight); }
-
-        /* Interactive Elements */
-        .btn-action {
-            background: var(--sunlight);
-            color: var(--noir);
-            border: none;
-            padding: 0.8rem 1.5rem;
+        /* Status Badges */
+        .status-container { display: flex; gap: 10px; }
+        .status-badge {
+            padding: 0.4rem 1rem;
             border-radius: 50px;
-            font-family: 'Outfit';
+            font-size: 0.7rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
+            background: rgba(231, 253, 230, 0.05);
+            color: var(--menthe);
+            border: 1px solid rgba(231, 253, 230, 0.2);
+            text-transform: uppercase;
         }
-        .btn-action:hover { box-shadow: 0 0 20px rgba(254, 250, 143, 0.4); transform: scale(1.05); }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        /* Table */
+        .table-card { padding: 0; overflow: hidden; }
+        .table-header { padding: 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th { 
+            padding: 1.5rem 2rem; 
+            text-align: left; 
+            color: var(--sunlight); 
+            font-family: 'Outfit', sans-serif; 
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.02);
+        }
+
+        td { padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.95rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(231, 253, 230, 0.02); }
+
+        @media (max-width: 1024px) {
+            nav { width: 80px; padding: 1.5rem 1rem; }
+            .logo-text, .nav-links span, .quote, h1 span { display: none; }
+            main { margin-left: 80px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="app-shell">
-        
-        <aside class="nav-rail">
-            <div class="brand-logo"></div>
-            <i data-lucide="layout-dashboard" class="nav-icon active"></i>
-            <i data-lucide="calendar" class="nav-icon"></i>
-            <i data-lucide="users" class="nav-icon"></i>
-            <i data-lucide="activity" class="nav-icon"></i>
-            <i data-lucide="settings" class="nav-icon" style="margin-top: auto;"></i>
-        </aside>
+    <nav>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="18" stroke="#FEFA8F" stroke-width="2.5"/>
+                <path d="M20 10V30M10 20H30" stroke="#FEFA8F" stroke-width="2.5"/>
+            </svg>
+            <div class="logo-text">zenwell</div>
+        </div>
 
-        <main class="client-view">
-            <div class="header-section">
-                <div>
-                    <h1>Bon retour, Marc</h1>
-                    <p class="quote">L'équilibre ne se calcule pas, il se ressent.</p>
-                </div>
-                <div class="rings-container">
-                    <div class="ring-stat">
-                        <div class="ring-visual">
-                            <svg width="50" height="50"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--sunlight)" stroke-width="5" stroke-dasharray="100" stroke-dashoffset="25"/></svg>
-                            <i data-lucide="flame" size="14" color="var(--sunlight)"></i>
-                        </div>
-                        <div>
-                            <span class="ring-label">Calories</span>
-                            <div class="ring-value">640</div>
-                        </div>
-                    </div>
-                    <div class="ring-stat">
-                        <div class="ring-visual">
-                            <svg width="50" height="50"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--menthe)" stroke-width="5" stroke-dasharray="100" stroke-dashoffset="10"/></svg>
-                            <i data-lucide="move" size="14" color="var(--menthe)"></i>
-                        </div>
-                        <div>
-                            <span class="ring-label">Mouvement</span>
-                            <div class="ring-value">85%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <ul class="nav-links">
+            <li><a href="#">🏠 <span>Dashboard</span></a></li>
+            <li><a href="#">📅 <span>Réservations</span></a></li>
+            <li><a href="#">👥 <span>Membres</span></a></li>
+            <li><a href="#">⚙️ <span>Infrastructure</span></a></li>
+        </ul>
 
-            <div class="dashboard-grid">
-                <div class="glass-card">
-                    <div class="card-title">
-                        Prochaines Séances
-                        <span style="font-size: 0.8rem; color: var(--sunlight); cursor: pointer;">Voir calendrier</span>
-                    </div>
-                    <div class="booking-item">
-                        <div class="booking-time">18:30</div>
-                        <div class="booking-info">
-                            <p style="font-weight: 600;">Yoga Vinyasa Flow</p>
-                            <p style="font-size: 0.8rem; color: var(--eucalyptus);">Studio A • Coach Elena</p>
-                        </div>
-                    </div>
-                    <div class="booking-item" style="border-left-color: var(--menthe); opacity: 0.8;">
-                        <div class="booking-time">08:00</div>
-                        <div class="booking-info">
-                            <p style="font-weight: 600;">Méditation Somatique</p>
-                            <p style="font-size: 0.8rem; color: var(--eucalyptus);">Demain • Digital Hub</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="quote" style="margin-top: auto;">"L'équilibre est un mouvement."</div>
+    </nav>
 
-                <div class="glass-card">
-                    <div class="card-title">Progression Biométrique</div>
-                    <canvas id="progressionChart" height="180"></canvas>
-                </div>
-
-                <div class="glass-card">
-                    <div class="card-title">Challenge Communautaire</div>
-                    <div style="background: linear-gradient(90deg, var(--sunlight), #fceabb); height: 8px; border-radius: 10px; margin-bottom: 1rem; position: relative;">
-                        <div style="position: absolute; right: 0; top: -20px; font-size: 0.7rem; color: var(--sunlight);">75% atteint</div>
-                    </div>
-                    <p style="font-size: 0.9rem; color: var(--eucalyptus);">Objectif : 10 000 min de pleine conscience collective.</p>
-                </div>
-
-                <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <i data-lucide="watch" color="var(--menthe)"></i>
-                        <div>
-                            <p style="font-weight: 600;">Apple Watch Sync</p>
-                            <p style="font-size: 0.75rem; color: var(--eucalyptus);">Dernière synchro : Il y a 2 min</p>
-                        </div>
-                    </div>
-                    <div class="user-status" style="width: 10px; height: 10px; box-shadow: 0 0 10px #4ADE80;"></div>
-                </div>
-            </div>
-        </main>
-
-        <aside class="admin-view">
+    <main>
+        <header>
             <div>
-                <span class="admin-section-title">Console Admin (GCP Monitoring)</span>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="metric-mini">
-                        <span class="label">Revenus (MTD)</span>
-                        <div class="val">42.8k€</div>
-                    </div>
-                    <div class="metric-mini">
-                        <span class="label">Churn Rate</span>
-                        <div class="val">1.2%</div>
-                    </div>
-                </div>
+                <h1>Console <span>de Gestion</span></h1>
+                <p class="quote">Bienvenue dans votre sanctuaire digital.</p>
             </div>
-
-            <div>
-                <span class="admin-section-title">Engagement Temps Réel</span>
-                <canvas id="adminMiniChart" height="120"></canvas>
+            <div class="status-container">
+                <span class="status-badge">GCP Run: Active</span>
+                <span class="status-badge">SQL: Connected</span>
             </div>
+        </header>
 
-            <div>
-                <span class="admin-section-title">Membres Actifs</span>
-                <div class="user-row">
-                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=1') center/cover;"></div>
-                    <div class="user-info">
-                        <span style="font-weight: 600;">Sophie L.</span>
-                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Elite Plan</span>
-                    </div>
-                    <div class="user-status"></div>
-                </div>
-                <div class="user-row">
-                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=2') center/cover;"></div>
-                    <div class="user-info">
-                        <span style="font-weight: 600;">Thomas R.</span>
-                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Standard Plan</span>
-                    </div>
-                    <div class="user-status"></div>
-                </div>
-                <div class="user-row">
-                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=3') center/cover;"></div>
-                    <div class="user-info">
-                        <span style="font-weight: 600;">Emma B.</span>
-                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Digital Only</span>
-                    </div>
-                    <div class="user-status" style="background: #fbbf24;"></div>
-                </div>
+        <section class="stats-grid">
+            <div class="card">
+                <h3>Utilisateurs Totaux</h3>
+                <div class="value">1,402</div>
             </div>
+            <div class="card">
+                <h3>Réservations / mois</h3>
+                <div class="value">584</div>
+            </div>
+            <div class="card">
+                <h3>Revenu Mensuel</h3>
+                <div class="value">12,450€</div>
+            </div>
+        </section>
 
-            <button class="btn-action" style="margin-top: auto; width: 100%;">Générer Rapport IA</button>
-        </aside>
+        <section class="card" style="margin-bottom: 3rem;">
+            <h3 style="margin-bottom: 2rem;">Activité de la WebApp (Temps Réel)</h3>
+            <canvas id="zenChart" style="max-height: 350px;"></canvas>
+        </section>
 
-    </div>
+        <section class="card table-card">
+            <div class="table-header">
+                <h3 style="margin:0;">Dernières Activités</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Membre</th>
+                        <th>Session</th>
+                        <th>Statut</th>
+                        <th>Instance Cloud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alice Martin</td>
+                        <td>Yoga Vinyasa</td>
+                        <td><span style="color: var(--menthe)">●</span> Confirmé</td>
+                        <td>cloud-run-01</td>
+                    </tr>
+                    <tr>
+                        <td>Marc Durand</td>
+                        <td>Méditation Somatique</td>
+                        <td><span style="color: var(--menthe)">●</span> Confirmé</td>
+                        <td>cloud-run-01</td>
+                    </tr>
+                    <tr>
+                        <td>Sophie Leroy</td>
+                        <td>Pilates Respiration</td>
+                        <td><span style="color: var(--sunlight)">●</span> En attente</td>
+                        <td>cloud-run-02</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Configuration du graphique avec les couleurs exactes ZenWell
+        const ctx = document.getElementById('zenChart').getContext('2d');
+        
+        // Gradient pour le remplissage
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(254, 250, 143, 0.15)');
+        gradient.addColorStop(1, 'rgba(254, 250, 143, 0)');
 
-        // Progression Chart (Client)
-        const ctx1 = document.getElementById('progressionChart').getContext('2d');
-        new Chart(ctx1, {
+        new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
                 datasets: [{
-                    label: 'Score Somatique',
-                    data: [65, 78, 72, 85, 82, 95, 92],
+                    label: 'Trafic',
+                    data: [12, 19, 15, 25, 22, 35, 30],
                     borderColor: '#FEFA8F',
-                    backgroundColor: 'rgba(254, 250, 143, 0.05)',
+                    borderWidth: 3,
+                    backgroundColor: gradient,
                     fill: true,
                     tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 0
+                    pointBackgroundColor: '#FEFA8F',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#D1E1D6', font: { family: 'Geist' } } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } }
+                    y: { 
+                        grid: { color: 'rgba(231, 253, 230, 0.05)' }, 
+                        ticks: { color: '#D1E1D6', font: { family: 'Geist' } } 
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#D1E1D6', font: { family: 'Geist' } } 
+                    }
                 }
             }
         });
-
-        // Admin Mini Chart
-        const ctx2 = document.getElementById('adminMiniChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-                datasets: [{
-                    data: [40, 60, 30, 80, 50, 90, 70, 40],
-                    backgroundColor: '#E7FDE6',
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { display: false },
-                    y: { display: false }
-                }
-            }
-        });
-
-        // Simulate Dynamic Updates
-        setInterval(() => {
-            const countUsers = document.getElementById('count-users');
-            if(countUsers) {
-                let current = parseInt(countUsers.innerText);
-                countUsers.innerText = current + Math.floor(Math.random() * 2);
-            }
-        }, 5000);
     </script>
 </body>
 </html>
