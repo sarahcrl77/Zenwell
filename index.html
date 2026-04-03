@@ -3,320 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenWell | Dashboard Officiel</title>
+    <title>ZenWell | Digital Sanctuary Platform</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Geist:wght@400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Geist:wght@300;400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* SYSTÈME DE DESIGN ZENWELL */
         :root {
+            /* Palette Officielle ZenWell */
             --obsidienne: #252525;
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
             --eucalyptus: #D1E1D6;
+            --cloud: #EEEDE8;
             --noir: #000000;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* UI Constants */
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(231, 253, 230, 0.08);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
             background-color: var(--obsidienne);
-            color: var(--eucalyptus);
+            color: var(--cloud);
             font-family: 'Geist', sans-serif;
-            display: flex;
-            min-height: 100vh;
-            /* Texture grain argentique demandée dans la charte */
+            height: 100vh;
+            overflow: hidden;
+            /* Texture grain argentique lourde (Charte p.29) */
             background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
         }
 
-        /* SIDEBAR */
-        aside {
-            width: 280px;
+        /* LAYOUT ARCHITECTURE */
+        .app-shell {
+            display: grid;
+            grid-template-columns: 80px 1fr 380px; /* Sidebar | Main | Admin Panel */
+            height: 100vh;
+            gap: 0;
+        }
+
+        /* 1. SIDEBAR (Navigation Icons Only) */
+        aside.nav-rail {
             background: var(--noir);
-            border-right: 1px solid rgba(231, 253, 230, 0.1);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            padding: 2.5rem 1.5rem;
-            position: fixed;
-            height: 100vh;
+            align-items: center;
+            padding: 2rem 0;
             z-index: 100;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 4rem;
-        }
-
-        /* Logo ZenWell fidèle au symbole officiel */
-        .logo-symbol {
-            width: 35px;
-            height: 35px;
+        .brand-logo {
+            width: 40px;
+            height: 40px;
             border: 2px solid var(--sunlight);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 3rem;
         }
-        .logo-symbol::after {
+        .brand-logo::after {
             content: '';
-            width: 12px;
-            height: 12px;
+            width: 12px; height: 12px;
             background: var(--sunlight);
             border-radius: 50%;
         }
 
-        .logo-text {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: var(--cloud, #EEEDE8);
-            letter-spacing: 1px;
-        }
-
-        .nav-menu { list-style: none; flex-grow: 1; }
-        .nav-item { margin-bottom: 0.8rem; }
-        .nav-link {
-            text-decoration: none;
+        .nav-icon {
             color: var(--eucalyptus);
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 8px;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        .nav-link:hover, .nav-link.active {
-            background: rgba(254, 250, 143, 0.1);
-            color: var(--sunlight);
-        }
-
-        /* MAIN CONTENT */
-        main {
-            margin-left: 280px;
-            flex-grow: 1;
-            padding: 3rem;
-            max-width: 1400px;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 3.5rem;
-        }
-
-        h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; color: var(--menthe); margin-bottom: 0.5rem; }
-        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.3rem; }
-
-        /* BOUTONS D'ACTION */
-        .btn-primary {
-            background: var(--sunlight);
-            color: var(--noir);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
+            margin-bottom: 2rem;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(254, 250, 143, 0.2);
+            opacity: 0.5;
         }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(254, 250, 143, 0.4);
+        .nav-icon:hover, .nav-icon.active { opacity: 1; color: var(--sunlight); }
+
+        /* 2. CLIENT DASHBOARD (Center Focus) */
+        main.client-view {
+            padding: 2.5rem;
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, rgba(231, 253, 230, 0.03), transparent);
         }
 
-        /* KPI CARDS */
-        .grid-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
             margin-bottom: 3rem;
         }
 
-        .card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(231, 253, 230, 0.08);
-            padding: 2rem;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
+        h1 { font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 700; color: var(--cloud); }
+        .quote { font-family: 'La Belle Aurore', cursive; color: var(--sunlight); font-size: 1.4rem; margin-top: 0.5rem; }
+
+        /* Activity Rings (Smartwatch Integration) */
+        .rings-container {
+            display: flex;
+            gap: 2rem;
+            background: var(--glass);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 2.5rem;
         }
 
-        .card h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; color: var(--eucalyptus); }
-        .card .value { font-family: 'Outfit', sans-serif; font-size: 2.8rem; color: var(--sunlight); font-weight: 700; }
+        .ring-stat { display: flex; align-items: center; gap: 1rem; }
+        .ring-visual {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 5px solid var(--obsidienne);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .ring-visual svg { position: absolute; transform: rotate(-90deg); }
+        .ring-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--eucalyptus); }
+        .ring-value { font-family: 'Outfit'; font-weight: 700; font-size: 1.2rem; color: var(--menthe); }
 
-        /* INFRASTRUCTURE STATUS */
-        .infra-grid {
+        /* Grid System */
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
 
-        .status-pill {
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .glass-card:hover { transform: translateY(-5px); border-color: rgba(254, 250, 143, 0.2); }
+
+        .card-title {
+            font-family: 'Outfit';
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Booking Cards */
+        .booking-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             padding: 1rem;
-            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: var(--radius-md);
             margin-bottom: 1rem;
+            border-left: 4px solid var(--sunlight);
+        }
+        .booking-time { font-family: 'Outfit'; font-weight: 700; color: var(--sunlight); min-width: 60px; }
+
+        /* 3. ADMIN DASHBOARD (Right Panel) */
+        aside.admin-view {
+            background: var(--noir);
+            border-left: 1px solid var(--border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        .badge {
-            background: #1b4332;
-            color: #E7FDE6;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .admin-section-title {
+            font-family: 'Outfit';
+            text-transform: uppercase;
             font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--menthe);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--eucalyptus); }
+        .user-info span { display: block; font-size: 0.85rem; }
+        .user-status { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; }
+
+        .metric-mini {
+            background: var(--obsidienne);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+        .metric-mini .label { font-size: 0.7rem; color: var(--eucalyptus); }
+        .metric-mini .val { font-family: 'Outfit'; font-size: 1.2rem; color: var(--sunlight); }
+
+        /* Interactive Elements */
+        .btn-action {
+            background: var(--sunlight);
+            color: var(--noir);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Outfit';
             font-weight: 700;
-            border: 1px solid var(--menthe);
+            cursor: pointer;
+            transition: 0.3s;
         }
+        .btn-action:hover { box-shadow: 0 0 20px rgba(254, 250, 143, 0.4); transform: scale(1.05); }
 
-        /* TABLE */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-        }
-        th { text-align: left; padding: 1.2rem; color: var(--sunlight); font-family: 'Outfit'; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        td { padding: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <aside>
-        <div class="logo-container">
-            <div class="logo-symbol"></div>
-            <div class="logo-text">zenwell</div>
-        </div>
+    <div class="app-shell">
+        
+        <aside class="nav-rail">
+            <div class="brand-logo"></div>
+            <i data-lucide="layout-dashboard" class="nav-icon active"></i>
+            <i data-lucide="calendar" class="nav-icon"></i>
+            <i data-lucide="users" class="nav-icon"></i>
+            <i data-lucide="activity" class="nav-icon"></i>
+            <i data-lucide="settings" class="nav-icon" style="margin-top: auto;"></i>
+        </aside>
 
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link active"><span>🏠</span> Dashboard</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><span>📅</span> Réservations</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><span>📈</span> Revenus</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><span>☁️</span> Google Cloud</a></li>
-        </ul>
+        <main class="client-view">
+            <div class="header-section">
+                <div>
+                    <h1>Bon retour, Marc</h1>
+                    <p class="quote">L'équilibre ne se calcule pas, il se ressent.</p>
+                </div>
+                <div class="rings-container">
+                    <div class="ring-stat">
+                        <div class="ring-visual">
+                            <svg width="50" height="50"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--sunlight)" stroke-width="5" stroke-dasharray="100" stroke-dashoffset="25"/></svg>
+                            <i data-lucide="flame" size="14" color="var(--sunlight)"></i>
+                        </div>
+                        <div>
+                            <span class="ring-label">Calories</span>
+                            <div class="ring-value">640</div>
+                        </div>
+                    </div>
+                    <div class="ring-stat">
+                        <div class="ring-visual">
+                            <svg width="50" height="50"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--menthe)" stroke-width="5" stroke-dasharray="100" stroke-dashoffset="10"/></svg>
+                            <i data-lucide="move" size="14" color="var(--menthe)"></i>
+                        </div>
+                        <div>
+                            <span class="ring-label">Mouvement</span>
+                            <div class="ring-value">85%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="quote">"L'équilibre ne se calcule pas, il se ressent."</div>
-    </aside>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <div class="card-title">
+                        Prochaines Séances
+                        <span style="font-size: 0.8rem; color: var(--sunlight); cursor: pointer;">Voir calendrier</span>
+                    </div>
+                    <div class="booking-item">
+                        <div class="booking-time">18:30</div>
+                        <div class="booking-info">
+                            <p style="font-weight: 600;">Yoga Vinyasa Flow</p>
+                            <p style="font-size: 0.8rem; color: var(--eucalyptus);">Studio A • Coach Elena</p>
+                        </div>
+                    </div>
+                    <div class="booking-item" style="border-left-color: var(--menthe); opacity: 0.8;">
+                        <div class="booking-time">08:00</div>
+                        <div class="booking-info">
+                            <p style="font-weight: 600;">Méditation Somatique</p>
+                            <p style="font-size: 0.8rem; color: var(--eucalyptus);">Demain • Digital Hub</p>
+                        </div>
+                    </div>
+                </div>
 
-    <main>
-        <div class="header-top">
+                <div class="glass-card">
+                    <div class="card-title">Progression Biométrique</div>
+                    <canvas id="progressionChart" height="180"></canvas>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title">Challenge Communautaire</div>
+                    <div style="background: linear-gradient(90deg, var(--sunlight), #fceabb); height: 8px; border-radius: 10px; margin-bottom: 1rem; position: relative;">
+                        <div style="position: absolute; right: 0; top: -20px; font-size: 0.7rem; color: var(--sunlight);">75% atteint</div>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--eucalyptus);">Objectif : 10 000 min de pleine conscience collective.</p>
+                </div>
+
+                <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <i data-lucide="watch" color="var(--menthe)"></i>
+                        <div>
+                            <p style="font-weight: 600;">Apple Watch Sync</p>
+                            <p style="font-size: 0.75rem; color: var(--eucalyptus);">Dernière synchro : Il y a 2 min</p>
+                        </div>
+                    </div>
+                    <div class="user-status" style="width: 10px; height: 10px; box-shadow: 0 0 10px #4ADE80;"></div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="admin-view">
             <div>
-                <h1>Tableau de bord</h1>
-                <p>Analyse de votre état somatique et digital.</p>
-            </div>
-            <button class="btn-primary" onclick="alert('Nouvelle session initialisée')">+ Nouvelle Session</button>
-        </div>
-
-        <div class="grid-stats">
-            <div class="card">
-                <h3>Utilisateurs Actifs</h3>
-                <div class="value" id="count-users">1,284</div>
-            </div>
-            <div class="card">
-                <h3>Séances ce jour</h3>
-                <div class="value">42</div>
-            </div>
-            <div class="card">
-                <h3>Chiffre d'Affaires</h3>
-                <div class="value">12.4k€</div>
-            </div>
-        </div>
-
-        <div class="infra-grid">
-            <div class="card">
-                <h3 style="color: var(--sunlight);">Activité Hebdomadaire</h3>
-                <canvas id="mainChart" height="150"></canvas>
-            </div>
-
-            <div class="card">
-                <h3 style="color: var(--sunlight);">Statut Cloud GCP</h3>
-                <div class="status-pill">
-                    <span>Cloud Run</span>
-                    <span class="badge">ACTIVE</span>
+                <span class="admin-section-title">Console Admin (GCP Monitoring)</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="metric-mini">
+                        <span class="label">Revenus (MTD)</span>
+                        <div class="val">42.8k€</div>
+                    </div>
+                    <div class="metric-mini">
+                        <span class="label">Churn Rate</span>
+                        <div class="val">1.2%</div>
+                    </div>
                 </div>
-                <div class="status-pill">
-                    <span>Cloud SQL</span>
-                    <span class="badge">CONNECTED</span>
-                </div>
-                <div class="status-pill">
-                    <span>Storage</span>
-                    <span class="badge">OK</span>
-                </div>
-                <button class="btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.6rem; font-size: 0.8rem;">Monitorer</button>
             </div>
-        </div>
 
-        <div class="card" style="margin-top: 2rem;">
-            <h3 style="color: var(--sunlight);">Derniers Membres</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Session</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Jean Dupont</td>
-                        <td>Yoga Sculpt</td>
-                        <td>02/04/2026</td>
-                        <td><button style="background:none; border:1px solid var(--sunlight); color:var(--sunlight); padding:4px 10px; border-radius:4px; cursor:pointer;">Détails</button></td>
-                    </tr>
-                    <tr>
-                        <td>Sophie Martin</td>
-                        <td>Méditation IA</td>
-                        <td>02/04/2026</td>
-                        <td><button style="background:none; border:1px solid var(--sunlight); color:var(--sunlight); padding:4px 10px; border-radius:4px; cursor:pointer;">Détails</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+            <div>
+                <span class="admin-section-title">Engagement Temps Réel</span>
+                <canvas id="adminMiniChart" height="120"></canvas>
+            </div>
+
+            <div>
+                <span class="admin-section-title">Membres Actifs</span>
+                <div class="user-row">
+                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=1') center/cover;"></div>
+                    <div class="user-info">
+                        <span style="font-weight: 600;">Sophie L.</span>
+                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Elite Plan</span>
+                    </div>
+                    <div class="user-status"></div>
+                </div>
+                <div class="user-row">
+                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=2') center/cover;"></div>
+                    <div class="user-info">
+                        <span style="font-weight: 600;">Thomas R.</span>
+                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Standard Plan</span>
+                    </div>
+                    <div class="user-status"></div>
+                </div>
+                <div class="user-row">
+                    <div class="avatar" style="background: url('https://i.pravatar.cc/150?u=3') center/cover;"></div>
+                    <div class="user-info">
+                        <span style="font-weight: 600;">Emma B.</span>
+                        <span style="color: var(--eucalyptus); font-size: 0.7rem;">Digital Only</span>
+                    </div>
+                    <div class="user-status" style="background: #fbbf24;"></div>
+                </div>
+            </div>
+
+            <button class="btn-action" style="margin-top: auto; width: 100%;">Générer Rapport IA</button>
+        </aside>
+
+    </div>
 
     <script>
-        // Graphique ZenWell
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Progression Chart (Client)
+        const ctx1 = document.getElementById('progressionChart').getContext('2d');
+        new Chart(ctx1, {
             type: 'line',
             data: {
                 labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
                 datasets: [{
-                    label: 'Trafic',
-                    data: [45, 52, 48, 70, 65, 90, 85],
+                    label: 'Score Somatique',
+                    data: [65, 78, 72, 85, 82, 95, 92],
                     borderColor: '#FEFA8F',
                     backgroundColor: 'rgba(254, 250, 143, 0.05)',
                     fill: true,
                     tension: 0.4,
-                    borderWidth: 3
+                    borderWidth: 3,
+                    pointRadius: 0
                 }]
             },
             options: {
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { display: false },
-                    x: { grid: { display: false }, ticks: { color: '#D1E1D6' } }
+                    x: { grid: { display: false }, ticks: { color: '#D1E1D6', font: { family: 'Geist' } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } }
                 }
             }
         });
 
-        // Animation simple pour les chiffres
+        // Admin Mini Chart
+        const ctx2 = document.getElementById('adminMiniChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                datasets: [{
+                    data: [40, 60, 30, 80, 50, 90, 70, 40],
+                    backgroundColor: '#E7FDE6',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                }
+            }
+        });
+
+        // Simulate Dynamic Updates
         setInterval(() => {
-            const el = document.getElementById('count-users');
-            let val = parseInt(el.innerText.replace(',', ''));
-            el.innerText = (val + Math.floor(Math.random() * 3)).toLocaleString();
-        }, 3000);
+            const countUsers = document.getElementById('count-users');
+            if(countUsers) {
+                let current = parseInt(countUsers.innerText);
+                countUsers.innerText = current + Math.floor(Math.random() * 2);
+            }
+        }, 5000);
     </script>
 </body>
 </html>
