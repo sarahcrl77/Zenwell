@@ -13,16 +13,15 @@
 
     <style>
         :root {
-            --obsidienne: #1a1a1a; /* Un peu plus profond pour le contraste */
+            --obsidienne: #1a1a1a;
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
             --text-main: #EEEDE8;
-            --text-dim: #A0A0A0; /* Gris clair pour la lisibilité */
+            --text-dim: #A0A0A0;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.15);
         }
 
-        /* Correction du scroll : on s'assure que le body peut scroller normalement */
         html, body {
             height: auto;
             min-height: 100%;
@@ -33,7 +32,6 @@
             scroll-behavior: smooth;
         }
 
-        /* --- Sidebar Fixée correctement --- */
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -59,7 +57,6 @@
             text-decoration: none;
         }
 
-        /* Correction du bug href="#" : on utilise des sélecteurs propres */
         .nav-link:hover, .nav-link.active {
             background: var(--sunlight);
             color: #000 !important;
@@ -68,14 +65,12 @@
 
         .nav-link i { margin-right: 15px; font-size: 1.2rem; }
 
-        /* --- Contenu Principal --- */
         .main-content {
-            margin-left: 260px; /* Aligné sur la largeur sidebar */
+            margin-left: 260px;
             padding: 3rem;
             width: calc(100% - 260px);
         }
 
-        /* --- Cartes : Amélioration Contraste --- */
         .zw-card {
             background: var(--glass);
             backdrop-filter: blur(15px);
@@ -102,7 +97,7 @@
         .kpi-value {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #FFFFFF; /* Blanc pur pour les chiffres */
+            color: #FFFFFF;
             margin-bottom: 0;
         }
 
@@ -127,7 +122,6 @@
             background-color: #fff;
         }
 
-        /* --- Tableau : Couleurs claires --- */
         .table {
             color: var(--text-main);
             margin-top: 1rem;
@@ -144,7 +138,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Responsive */
         @media (max-width: 992px) {
             .sidebar { width: 80px; }
             .sidebar span, .sidebar h4 { display: none; }
@@ -160,8 +153,10 @@
         </div>
         
         <nav class="flex-grow-1">
-            <a class="nav-link active" href="javascript:void(0)"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
-            <a class="nav-link" href="javascript:void(0)"><i class="bi bi-play-circle-fill"></i><span>Mes cours</span></a>
+            <a class="nav-link active" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            
+            <a class="nav-link" href="Mescours.html"><i class="bi bi-play-circle-fill"></i><span>Mes cours</span></a>
+            
             <a class="nav-link" href="javascript:void(0)"><i class="bi bi-bullseye"></i><span>Mes objectifs</span></a>
             <a class="nav-link" href="javascript:void(0)"><i class="bi bi-trophy-fill"></i><span>Mes challenges</span></a>
             <a class="nav-link" href="javascript:void(0)"><i class="bi bi-graph-up-arrow"></i><span>Progression</span></a>
@@ -290,7 +285,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Configuration Graphique Linéaire
         const ctxLine = document.getElementById('lineChart').getContext('2d');
         new Chart(ctxLine, {
             type: 'line',
@@ -319,7 +313,6 @@
             }
         });
 
-        // Configuration Graphique Donut
         const ctxDonut = document.getElementById('donutChart').getContext('2d');
         new Chart(ctxDonut, {
             type: 'doughnut',
