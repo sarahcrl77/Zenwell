@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenWell | Mes Cours</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --obsidienne: #1a1a1a;
+            --sunlight: #FEFA8F;
+            --menthe: #E7FDE6;
+            --text-main: #EEEDE8;
+            --text-dim: #A0A0A0;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--obsidienne);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            background: #111111;
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 1.2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--sunlight);
+            color: #000 !important;
+            font-weight: 600;
+        }
+
+        .nav-link i { margin-right: 15px; font-size: 1.2rem; }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 3rem;
+            width: calc(100% - 260px);
+        }
+
+        /* --- Cards & UI --- */
+        .zw-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zw-card:hover {
+            border-color: var(--sunlight);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-sunlight {
+            background-color: var(--sunlight);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-sunlight:hover { background-color: #fff; transform: scale(1.05); }
+
+        /* --- Like System --- */
+        .heart-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .heart-btn.active {
+            color: #ff4b2b;
+            background: white;
+        }
+
+        /* --- Custom Horizontal Scroll --- */
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--sunlight) transparent;
+        }
+
+        /* --- Table Styling --- */
+        .table-premium {
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .table-premium th {
+            color: var(--text-dim);
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .table-premium td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            vertical-align: middle;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; }
+            .sidebar span { display: none; }
+            .main-content { margin-left: 80px; width: calc(100% - 80px); padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="mb-5 px-3">
+            <h4 class="fw-bold m-0">ZEN<span style="color: var(--sunlight)">WELL</span></h4>
+        </div>
+        <nav class="flex-grow-1">
+            <a class="nav-link" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a class="nav-link active" href="mes-cours.html"><i class="bi bi-play-circle-fill"></i><span>Mes cours</span></a>
+            <a class="nav-link" href="#"><i class="bi bi-bullseye"></i><span>Mes objectifs</span></a>
+            <a class="nav-link" href="#"><i class="bi bi-trophy-fill"></i><span>Mes challenges</span></a>
+            <a class="nav-link" href="#"><i class="bi bi-graph-up-arrow"></i><span>Progression</span></a>
+        </nav>
+        <div class="border-top border-secondary pt-3 mt-auto">
+            <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i><span>Paramètres</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="mb-5">
+            <h1 class="fw-bold mb-1">Mes cours</h1>
+            <p class="text-dim">Suivez, planifiez et améliorez votre pratique.</p>
+        </header>
+
+        <section class="mb-5">
+            <h4 class="fw-bold mb-4 d-flex align-items-center">
+                À venir <span class="badge ms-3" style="background: var(--sunlight); color: #000; font-size: 0.7rem;">2 SÉANCES</span>
+            </h4>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="zw-card border-start border-4 border-warning">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-dim small uppercase">Aujourd'hui • 18:30</span>
+                            <span class="fw-bold" style="color: var(--sunlight)">45 min</span>
+                        </div>
+                        <h5 class="fw-bold mb-1">Vinyasa Flow Énergie</h5>
+                        <p class="text-dim small mb-4">Coach : Elena Vance</p>
+                        <button class="btn-sunlight w-100">Rejoindre la séance</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="zw-card">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-dim small uppercase">Demain • 08:00</span>
+                            <span class="fw-bold">20 min</span>
+                        </div>
+                        <h5 class="fw-bold mb-1">Méditation Pleine Conscience</h5>
+                        <p class="text-dim small mb-4">Coach : Marcus Sol</p>
+                        <button class="btn btn-outline-light w-100 rounded-3">Se préparer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" id="favorites-section" style="display: none;">
+            <h4 class="fw-bold mb-4">Mes cours préférés ❤️</h4>
+            <div class="horizontal-scroll" id="favorites-container">
+                </div>
+        </section>
+
+        <section class="mb-5">
+            <h4 class="fw-bold mb-4">Suggestions pour vous</h4>
+            <div class="horizontal-scroll">
+                <div class="zw-card" style="min-width: 300px;">
+                    <button class="heart-btn" onclick="toggleFavorite(this, 'Pilates Core', 'Améliorez votre posture', '30 min', 'Intensif')">
+                        <i class="bi bi-heart-fill"></i>
+                    </button>
+                    <span class="badge bg-dark mb-3">Intensif</span>
+                    <h6 class="fw-bold mb-1">Pilates Core</h6>
+                    <p class="text-dim small">Renforcement profond et posture.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="small">30 min</span>
+                        <a href="#" class="text-decoration-none fw-bold" style="color: var(--sunlight)">Découvrir</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="zw-card" style="min-width: 300px;">
+                        <button class="heart-btn" onclick="toggleFavorite(this, 'Yoga Sommeil', 'Idéal avant de dormir', '15 min', 'Relaxation')">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                        <span class="badge bg-dark mb-3">Relaxation</span>
+                        <h6 class="fw-bold mb-1">Yoga Sommeil</h6>
+                        <p class="text-dim small">Idéal avant de dormir.</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="small">15 min</span>
+                            <a href="#" class="text-decoration-none fw-bold" style="color: var(--sunlight)">Découvrir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h4 class="fw-bold mb-4">Historique des cours</h4>
+            <div class="table-premium table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Cours</th>
+                            <th>Coach</th>
+                            <th>Durée</th>
+                            <th>Ressenti</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <tr>
+                            <td>12 Avril 2026</td>
+                            <td class="fw-bold text-white">HIIT Cardio Burn</td>
+                            <td>Marc A.</td>
+                            <td>30 min</td>
+                            <td><span style="color: var(--sunlight)">Excellent</span></td>
+                        </tr>
+                        <tr>
+                            <td>10 Avril 2026</td>
+                            <td class="fw-bold text-white">Yin Yoga</td>
+                            <td>Sarah J.</td>
+                            <td>60 min</td>
+                            <td><span style="color: var(--menthe)">Apaisé</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Système de Favoris ---
+        let favorites = JSON.parse(localStorage.getItem('zenwell_favs')) || [];
+
+        function toggleFavorite(btn, title, desc, duration, tag) {
+            const course = { title, desc, duration, tag };
+            const index = favorites.findIndex(f => f.title === title);
+
+            if (index === -1) {
+                favorites.push(course);
+                btn.classList.add('active');
+            } else {
+                favorites.splice(index, 1);
+                btn.classList.remove('active');
+            }
+
+            localStorage.setItem('zenwell_favs', JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favorites-container');
+            const section = document.getElementById('favorites-section');
+            
+            if (favorites.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            container.innerHTML = favorites.map(f => `
+                <div class="zw-card" style="min-width: 280px;">
+                    <span class="badge bg-dark mb-3">${f.tag}</span>
+                    <h6 class="fw-bold mb-1">${f.title}</h6>
+                    <p class="text-dim small mb-3">${f.desc}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small">${f.duration}</span>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeFav('${f.title}')">Retirer</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeFav(title) {
+            favorites = favorites.filter(f => f.title !== title);
+            localStorage.setItem('zenwell_favs', JSON.stringify(favorites));
+            
+            // Sync UI hearts
+            document.querySelectorAll('.heart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            renderFavorites();
+        }
+
+        // Initial Load
+        window.onload = renderFavorites;
+    </script>
+</body>
+</html>
