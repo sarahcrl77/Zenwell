@@ -1,1 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenWell | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --obsidian: #252525;
+            --sunlight: #FEFA8F;
+            --menthe: #E7FDE6;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #FFFFFF;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-top: 80px; /* Space for fixed nav */
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            background: rgba(37, 37, 37, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            color: var(--menthe);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        .nav-links a.active {
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--sunlight);
+            border-radius: 50%;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-dim);
+        }
+
+        /* --- KPI GRID --- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.8rem;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .kpi-unit {
+            font-size: 1rem;
+            color: var(--text-dim);
+        }
+
+        /* --- INSIGHT BLOCK --- */
+        .insight-banner {
+            background: linear-gradient(90deg, rgba(231, 253, 230, 0.1) 0%, rgba(37, 37, 37, 0) 100%);
+            border-left: 3px solid var(--menthe);
+            padding: 1.5rem;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 3rem;
+        }
+
+        .insight-banner p {
+            color: var(--menthe);
+            font-weight: 400;
+        }
+
+        /* --- CHARTS SECTION --- */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 992px) {
+            .charts-row { grid-template-columns: 1fr; }
+        }
+
+        /* --- DATA TABLE --- */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-dim);
+            font-weight: 400;
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-success { color: var(--menthe); background: rgba(231, 253, 230, 0.1); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">ZenWell</div>
+        <div class="nav-links">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Mes cours</a>
+            <a href="#">Mes objectifs</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Bonjour, Alex</h1>
+            <p>Voici votre aperçu bien-être pour aujourd'hui.</p>
+        </header>
+
+        <div class="insight-banner">
+            <p>✨ <strong>Conseil du jour :</strong> Prenez le temps de récupérer aujourd’hui. Votre équilibre est en progression constante cette semaine.</p>
+        </div>
+
+        <section class="kpi-grid">
+            <div class="card">
+                <span class="kpi-label">Sessions Hebdo</span>
+                <div class="kpi-value">12 <span class="kpi-unit">/ 15</span></div>
+            </div>
+            <div class="card">
+                <span class="kpi-label">Niveau de Stress</span>
+                <div class="kpi-value" style="color: var(--menthe);">Bas</div>
+            </div>
+            <div class="card">
+                <span class="kpi-label">Récupération</span>
+                <div class="kpi-value">88<span class="kpi-unit">%</span></div>
+            </div>
+            <div class="card">
+                <span class="kpi-label">Calories</span>
+                <div class="kpi-value">2,450 <span class="kpi-unit">kcal</span></div>
+            </div>
+        </section>
+
+        <section class="charts-row">
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Progression de l'activité</h3>
+                <canvas id="lineChart" height="150"></canvas>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Focus</h3>
+                <canvas id="donutChart"></canvas>
+            </div>
+        </section>
+
+        <section class="card">
+            <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Sessions Récentes</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Durée</th>
+                            <th>Intensité</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12 Oct 2023</td>
+                            <td>Yoga Vinyasa</td>
+                            <td>45 min</td>
+                            <td>Modérée</td>
+                            <td><span class="status-badge status-success">Complété</span></td>
+                        </tr>
+                        <tr>
+                            <td>11 Oct 2023</td>
+                            <td>Méditation guidée</td>
+                            <td>15 min</td>
+                            <td>Basse</td>
+                            <td><span class="status-badge status-success">Complété</span></td>
+                        </tr>
+                        <tr>
+                            <td>10 Oct 2023</td>
+                            <td>HIIT Cardio</td>
+                            <td>30 min</td>
+                            <td>Élevée</td>
+                            <td><span class="status-badge status-success">Complété</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Chart configuration defaults
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
+        Chart.defaults.font.family = 'Outfit';
+
+        // Line Chart
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Minutes Actives',
+                    data: [30, 45, 60, 35, 90, 120, 40],
+                    borderColor: '#FEFA8F',
+                    backgroundColor: 'rgba(254, 250, 143, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, border: { display: false } },
+                    x: { grid: { display: false }, border: { display: false } }
+                }
+            }
+        });
+
+        // Donut Chart
+        const ctxDonut = document.getElementById('donutChart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Yoga', 'Cardio', 'Méditation'],
+                datasets: [{
+                    data: [50, 30, 20],
+                    backgroundColor: ['#E7FDE6', '#FEFA8F', 'rgba(255, 255, 255, 0.1)'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>
