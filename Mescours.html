@@ -1,1 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenWell | Mes Cours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --obsidian: #252525;
+            --sunlight: #FEFA8F;
+            --menthe: #E7FDE6;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-thick: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #FFFFFF;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            background: rgba(37, 37, 37, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); }
+        .nav-links { display: flex; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+        .nav-links a.active { font-weight: 500; position: relative; }
+        .nav-links a.active::after {
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: var(--sunlight); border-radius: 50%;
+        }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+        
+        section { margin-bottom: 5rem; animation: fadeIn 0.8s ease-out both; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.4s; }
+
+        h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; }
+        h2 span { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- CARDS SYSTEM --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 1.5rem;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+        }
+
+        .card:hover {
+            background: var(--glass-thick);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .card-title { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .card-meta { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem; }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+
+        /* --- CTA BUTTONS --- */
+        .btn-primary {
+            background: var(--sunlight);
+            color: var(--obsidian);
+            padding: 10px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(254, 250, 143, 0.2); }
+
+        .btn-secondary {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover { opacity: 1; }
+
+        /* --- FAVORITE ICON --- */
+        .fav-toggle {
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            transition: var(--transition);
+            background: none;
+            border: none;
+        }
+        .fav-toggle.active { color: var(--sunlight); transform: scale(1.2); }
+
+        /* --- SECTIONS SPECIFICS --- */
+        .upcoming .card { border-left: 4px solid var(--sunlight); background: linear-gradient(145deg, rgba(254, 250, 143, 0.05) 0%, rgba(255,255,255,0.02) 100%); }
+        
+        .past .card { opacity: 0.8; }
+        .past .card:hover { opacity: 1; }
+
+        .suggested .card { border-bottom: 4px solid var(--menthe); }
+
+        /* --- COMING SOON --- */
+        .coming-soon-grid { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
+        .badge-soon { background: var(--menthe) !important; color: var(--obsidian) !important; font-weight: 600; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            h2 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">ZenWell</div>
+        <div class="nav-links">
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="#" class="active">Mes cours</a>
+            <a href="#">Mes objectifs</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <section class="upcoming">
+            <h2><span>Prochainement</span> Mes rendez-vous</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Demain • 09:30</div>
+                        <h3 class="card-title">Hatha Yoga Matinal</h3>
+                        <p class="card-meta">Avec Coach Sarah • 45 min</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn-primary">Rejoindre</a>
+                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="card-tag">14 Oct • 18:00</div>
+                        <h3 class="card-title">Méditation Profonde</h3>
+                        <p class="card-meta">Avec Coach Marc • 20 min</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn-secondary">Détails</a>
+                        <button class="fav-toggle active" onclick="toggleFav(this)">★</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="suggested">
+            <h2><span>Inspiration</span> Recommandé pour vous</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <div class="card-tag" style="color: var(--menthe)">Nouveau</div>
+                        <h3 class="card-title">Pilates Flow</h3>
+                        <p class="card-meta">Renforcez votre posture et votre souffle.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn-secondary">Découvrir</a>
+                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Populaire</div>
+                        <h3 class="card-title">Respiration Wim Hof</h3>
+                        <p class="card-meta">Maîtrisez votre énergie vitale.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn-secondary">Découvrir</a>
+                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="past">
+            <h2><span>Historique</span> Cours terminés</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Terminé</div>
+                        <h3 class="card-title">Yin Yoga</h3>
+                        <p class="card-meta">8 Oct 2023 • 60 min</p>
+                    </div>
+                    <div class="card-footer">
+                        <span style="color: var(--menthe); font-size: 0.8rem;">✓ Complété</span>
+                        <button class="fav-toggle active" onclick="toggleFav(this)">★</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2><span>Innovation</span> Bientôt disponible</h2>
+            <div class="grid coming-soon-grid">
+                <div class="card">
+                    <div>
+                        <div class="card-tag badge-soon">Prochainement</div>
+                        <h3 class="card-title">Live Coaching 1:1</h3>
+                        <p class="card-meta">Sessions privées avec nos experts.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="card-tag badge-soon">Prochainement</div>
+                        <h3 class="card-title">Analyse IA Sommeil</h3>
+                        <p class="card-meta">Optimisez vos nuits pour mieux vivre.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function toggleFav(btn) {
+            btn.classList.toggle('active');
+            // Adding a small scale pop animation via JS for tactile feel
+            btn.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.4)' },
+                { transform: 'scale(1)' }
+            ], {
+                duration: 300,
+                easing: 'ease-out'
+            });
+        }
+    </script>
+</body>
+</html>
