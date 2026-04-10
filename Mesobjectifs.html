@@ -1,1 +1,238 @@
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenWell | Mes Objectifs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --obsidian: #252525;
+            --sunlight: #FEFA8F;
+            --menthe: #E7FDE6;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #FFFFFF;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            padding-top: 80px;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: rgba(37, 37, 37, 0.8);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); }
+        .nav-links { display: flex; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a.active { color: var(--text-main); font-weight: 500; position: relative; }
+        .nav-links a.active::after {
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: var(--sunlight); border-radius: 50%;
+        }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 4rem 5%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
+
+        @media (max-width: 992px) { .container { grid-template-columns: 1fr; } }
+
+        h1 { font-size: 2.5rem; font-weight: 500; margin-bottom: 1rem; letter-spacing: -1px; }
+        .subtitle { color: var(--text-dim); margin-bottom: 3rem; }
+
+        /* --- INTERACTIVE FORM --- */
+        .goal-form { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 32px; padding: 2.5rem; position: relative; }
+
+        .form-section { display: none; animation: slideIn 0.6s ease-out forwards; }
+        .form-section.active { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        label { display: block; color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+
+        input[type="number"], input[type="range"] {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            padding: 1rem; border-radius: 12px; color: white; font-family: inherit; font-size: 1.2rem;
+            margin-bottom: 2rem; outline: none; transition: var(--transition);
+        }
+        input:focus { border-color: var(--sunlight); background: rgba(255,255,255,0.1); }
+
+        /* Custom Stress Toggle */
+        .stress-selector { display: flex; gap: 10px; margin-bottom: 2rem; }
+        .stress-option {
+            flex: 1; padding: 12px; text-align: center; border-radius: 12px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            cursor: pointer; transition: var(--transition); font-size: 0.9rem;
+        }
+        .stress-option.selected { background: var(--menthe); color: var(--obsidian); border-color: var(--menthe); }
+
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn {
+            padding: 14px 28px; border-radius: 16px; border: none; cursor: pointer;
+            font-family: inherit; font-weight: 500; transition: var(--transition);
+        }
+        .btn-next { background: var(--sunlight); color: var(--obsidian); }
+        .btn-prev { background: transparent; color: var(--text-dim); border: 1px solid var(--glass-border); }
+        .btn-save { background: var(--menthe); color: var(--obsidian); width: 100%; margin-top: 1rem; display: none; }
+
+        /* --- VISUAL TRACKING (RIGHT SIDE) --- */
+        .tracking-panel { position: sticky; top: 120px; }
+        
+        .progress-circle-container {
+            width: 200px; height: 200px; margin: 0 auto 2rem; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        svg { transform: rotate(-90deg); width: 200px; height: 200px; }
+        circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .bg-circle { stroke: var(--glass-border); }
+        .prog-circle {
+            stroke: var(--sunlight); stroke-dasharray: 565; stroke-dashoffset: 400;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+        .percentage { position: absolute; font-size: 2rem; font-weight: 600; }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(231, 253, 230, 0.05) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.5rem; margin-top: 2rem;
+        }
+        .insight-card p { color: var(--menthe); font-size: 0.95rem; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">ZenWell</div>
+        <div class="nav-links">
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="MesCours.html">Mes cours</a>
+            <a href="#" class="active">Mes objectifs</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <main>
+            <h1>Définir votre cap.</h1>
+            <p class="subtitle">Répondez à quelques questions pour personnaliser votre expérience.</p>
+
+            <div class="goal-form">
+                <div class="form-section active" id="step1">
+                    <label>Objectif Physique</label>
+                    <p style="margin-bottom: 1.5rem;">Quel est votre poids cible ? (kg)</p>
+                    <input type="number" id="weight" placeholder="Ex: 75">
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-next" onclick="nextStep(2)">Continuer</button>
+                    </div>
+                </div>
+
+                <div class="form-section" id="step2">
+                    <label>Bien-être & Sommeil</label>
+                    <p style="margin-bottom: 1.5rem;">Heures de sommeil souhaitées par nuit</p>
+                    <input type="range" id="sleep" min="4" max="12" value="8" oninput="updateSleepVal(this.value)">
+                    <p id="sleepVal" style="text-align: center; margin-bottom: 2rem;">8 heures</p>
+
+                    <label>Niveau de stress actuel</label>
+                    <div class="stress-selector">
+                        <div class="stress-option" onclick="selectStress(this, 'Bas')">Bas</div>
+                        <div class="stress-option selected" onclick="selectStress(this, 'Moyen')">Moyen</div>
+                        <div class="stress-option" onclick="selectStress(this, 'Élevé')">Élevé</div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-prev" onclick="nextStep(1)">Retour</button>
+                        <button class="btn btn-next" onclick="nextStep(3)">Continuer</button>
+                    </div>
+                </div>
+
+                <div class="form-section" id="step3">
+                    <label>Activité Physique</label>
+                    <p style="margin-bottom: 1.5rem;">Combien de séances par semaine ?</p>
+                    <input type="number" id="sessions" placeholder="Ex: 4">
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-prev" onclick="nextStep(2)">Retour</button>
+                        <button class="btn btn-save" id="saveBtn" onclick="saveGoals()" style="display: block;">Enregistrer les objectifs</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="tracking-panel">
+            <div class="progress-circle-container">
+                <svg>
+                    <circle class="bg-circle" cx="100" cy="100" r="90"></circle>
+                    <circle class="prog-circle" id="circleProgress" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="percentage" id="percText">65%</div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3 style="font-weight: 500;">Complétion du profil</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem;">Vos objectifs définissent votre succès.</p>
+            </div>
+
+            <div class="insight-card">
+                <p>💡 <strong>Smart Insight :</strong> Basé sur votre stress "Moyen", nous vous suggérons d'ajouter 15 min de méditation après vos séances intenses.</p>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        function nextStep(step) {
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            
+            // Update progress circle visually for the demo
+            const circle = document.getElementById('circleProgress');
+            const percText = document.getElementById('percText');
+            if(step === 1) { circle.style.strokeDashoffset = 400; percText.innerText = "30%"; }
+            if(step === 2) { circle.style.strokeDashoffset = 200; percText.innerText = "65%"; }
+            if(step === 3) { circle.style.strokeDashoffset = 50; percText.innerText = "90%"; }
+        }
+
+        function updateSleepVal(val) {
+            document.getElementById('sleepVal').innerText = val + " heures";
+        }
+
+        function selectStress(el, val) {
+            document.querySelectorAll('.stress-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function saveGoals() {
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Chargement...";
+            btn.style.background = "white";
+            
+            setTimeout(() => {
+                btn.innerText = "✓ Objectifs enregistrés";
+                btn.style.background = "var(--menthe)";
+                
+                // Final visual completion
+                document.getElementById('circleProgress').style.strokeDashoffset = 0;
+                document.getElementById('percText').innerText = "100%";
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
