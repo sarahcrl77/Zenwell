@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenWell | Mes Objectifs</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --obsidienne: #1a1a1a;
+            --sunlight: #FEFA8F;
+            --menthe: #E7FDE6;
+            --text-main: #EEEDE8;
+            --text-dim: #A0A0A0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        body {
+            background-color: var(--obsidienne);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            background: #111111;
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 1.2rem;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--sunlight);
+            color: #000 !important;
+            font-weight: 600;
+        }
+
+        .nav-link i { margin-right: 15px; font-size: 1.2rem; }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 3rem;
+            width: calc(100% - 260px);
+        }
+
+        /* --- Glass Cards --- */
+        .zw-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 1.8rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .zw-card:hover {
+            border-color: rgba(254, 250, 143, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* --- Header & Typography --- */
+        .handwritten {
+            font-family: 'La Belle Aurore', cursive;
+            color: var(--sunlight);
+            font-size: 1.3rem;
+        }
+
+        /* --- Interactive Elements --- */
+        .progress {
+            background: rgba(255,255,255,0.05);
+            height: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--sunlight);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slider-custom {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            outline: none;
+        }
+
+        .slider-custom::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--sunlight);
+            cursor: pointer;
+            border: 3px solid var(--obsidienne);
+        }
+
+        .mood-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            font-size: 1.5rem;
+            padding: 10px;
+            border-radius: 15px;
+            transition: 0.2s;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .mood-btn:hover, .mood-btn.active {
+            background: var(--sunlight);
+            transform: scale(1.1);
+        }
+
+        .btn-sunlight {
+            background: var(--sunlight);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .btn-sunlight:hover { background: #fff; transform: translateY(-2px); }
+
+        input[type="number"] {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: 8px;
+            padding: 5px 10px;
+            width: 80px;
+            text-align: center;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; }
+            .sidebar span, .sidebar h4 { display: none; }
+            .main-content { margin-left: 80px; width: calc(100% - 80px); padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="mb-5 px-3">
+            <h4 class="fw-bold m-0" style="letter-spacing: -1px;">ZEN<span style="color: var(--sunlight)">WELL</span></h4>
+        </div>
+        <nav class="flex-grow-1">
+            <a class="nav-link" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a class="nav-link" href="Mescours.html"><i class="bi bi-play-circle-fill"></i><span>Mes cours</span></a>
+            <a class="nav-link active" href="#"><i class="bi bi-bullseye"></i><span>Mes objectifs</span></a>
+            <a class="nav-link" href="#"><i class="bi bi-trophy-fill"></i><span>Mes challenges</span></a>
+            <a class="nav-link" href="#"><i class="bi bi-graph-up-arrow"></i><span>Progression</span></a>
+        </nav>
+        <div class="border-top border-secondary pt-3 mt-auto">
+            <a class="nav-link" href="#"><i class="bi bi-gear-fill"></i><span>Paramètres</span></a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="d-flex justify-content-between align-items-start mb-5">
+            <div>
+                <h1 class="fw-bold mb-1">Mes objectifs</h1>
+                <p class="text-dim">Suivez votre progression et trouvez votre équilibre.</p>
+            </div>
+            <button class="btn btn-outline-danger border-0 opacity-50 small" onclick="resetGoals()">
+                <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+            </button>
+        </header>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="zw-card text-center py-5" style="background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(254, 250, 143, 0.05) 100%);">
+                    <h5 class="text-dim small uppercase mb-4">Votre équilibre global</h5>
+                    <h2 class="display-1 fw-bold mb-2" id="globalScoreDisplay">0%</h2>
+                    <div class="progress mx-auto" style="max-width: 600px; height: 15px;">
+                        <div id="globalProgressBar" class="progress-bar shadow-glow" style="width: 0%"></div>
+                    </div>
+                    <p class="handwritten mt-4" id="encouragementMsg">C'est un excellent début ! 💪</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-6 col-lg-4">
+                <div class="zw-card">
+                    <div class="d-flex justify-content-between mb-4">
+                        <h6 class="fw-bold m-0"><i class="bi bi-moon-stars me-2 text-info"></i> SOMMEIL</h6>
+                        <span class="text-white-50 small" id="sleepVal">7h</span>
+                    </div>
+                    <label class="label-muted">Qualité de récupération</label>
+                    <input type="range" min="4" max="12" step="0.5" value="7" class="slider-custom mb-4" id="sleepInput" oninput="updateSleep(this.value)">
+                    <div class="progress"><div id="sleepBar" class="progress-bar" style="width: 70%"></div></div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="zw-card">
+                    <div class="d-flex justify-content-between mb-4">
+                        <h6 class="fw-bold m-0"><i class="bi bi-scale me-2 text-warning"></i> POIDS</h6>
+                        <span class="text-white-50 small">Cible: <span id="weightTargetDisplay">70</span>kg</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <input type="number" id="weightCurrent" value="75" onchange="updateWeight()">
+                        <span class="text-dim">kg actuels</span>
+                    </div>
+                    <label class="label-muted">Progression vers l'objectif</label>
+                    <div class="progress"><div id="weightBar" class="progress-bar" style="width: 40%"></div></div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="zw-card">
+                    <h6 class="fw-bold mb-4"><i class="bi bi-egg-fried me-2 text-success"></i> NUTRITION</h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="nutri1" onchange="updateNutrition()">
+                        <label class="form-check-label small" for="nutri1">Petit-déjeuner équilibré</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="nutri2" onchange="updateNutrition()">
+                        <label class="form-check-label small" for="nutri2">Hydratation (2L d'eau)</label>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="nutri3" onchange="updateNutrition()">
+                        <label class="form-check-label small" for="nutri3">Pas de sucre ajouté</label>
+                    </div>
+                    <div class="progress"><div id="nutriBar" class="progress-bar" style="width: 0%"></div></div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="zw-card">
+                    <h6 class="fw-bold mb-4">COMMENT VOUS SENTEZ-VOUS AUJOURD'HUI ?</h6>
+                    <div class="d-flex gap-3 mb-4" id="moodContainer">
+                        <button class="mood-btn" onclick="setMood('great', this)">😃</button>
+                        <button class="mood-btn" onclick="setMood('okay', this)">😐</button>
+                        <button class="mood-btn" onclick="setMood('tired', this)">😴</button>
+                        <button class="mood-btn" onclick="setMood('sad', this)">😞</button>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <p class="small text-dim mb-2">Ressenti corporel</p>
+                            <select class="form-select bg-dark text-white border-secondary" id="bodyFeeling" onchange="saveData()">
+                                <option value="top">En pleine forme</option>
+                                <option value="sore">Courbatures</option>
+                                <option value="heavy">Fatigue lourde</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="zw-card">
+                    <h6 class="fw-bold mb-3">SÉANCES SPORTIVES</h6>
+                    <p class="display-5 fw-bold mb-1" id="sportCountDisplay">0 <small class="fs-6 text-dim">/ 5</small></p>
+                    <p class="text-dim small mb-4">Objectif hebdomadaire</p>
+                    <button class="btn-sunlight w-100 mb-3" onclick="addSportSession()">Ajouter une séance</button>
+                    <div class="progress"><div id="sportBar" class="progress-bar" style="width: 0%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="mt-5">
+            <h4 class="fw-bold mb-4">Résumé d'aujourd'hui</h4>
+            <div class="zw-card">
+                <div class="row text-center">
+                    <div class="col-md-3 border-end border-secondary">
+                        <p class="label-muted mb-1">Sommeil</p>
+                        <p class="fw-bold m-0" id="summarySleep">-</p>
+                    </div>
+                    <div class="col-md-3 border-end border-secondary">
+                        <p class="label-muted mb-1">Humeur</p>
+                        <p class="fw-bold m-0" id="summaryMood">-</p>
+                    </div>
+                    <div class="col-md-3 border-end border-secondary">
+                        <p class="label-muted mb-1">Sport</p>
+                        <p class="fw-bold m-0" id="summarySport">0 séance</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="label-muted mb-1">Status</p>
+                        <p class="fw-bold m-0" style="color: var(--menthe)">Actif</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- DATA MGT ---
+        let userData = JSON.parse(localStorage.getItem('zenwell_goals')) || {
+            sleep: 7,
+            weightCurrent: 75,
+            weightTarget: 70,
+            nutrition: [false, false, false],
+            mood: null,
+            sportSessions: 0,
+            bodyFeeling: 'top'
+        };
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            loadUI();
+            calculateGlobalScore();
+        };
+
+        function loadUI() {
+            // Sleep
+            document.getElementById('sleepInput').value = userData.sleep;
+            document.getElementById('sleepVal').innerText = userData.sleep + 'h';
+            
+            // Weight
+            document.getElementById('weightCurrent').value = userData.weightCurrent;
+            document.getElementById('weightTargetDisplay').innerText = userData.weightTarget;
+
+            // Nutrition
+            userData.nutrition.forEach((val, i) => {
+                document.getElementById('nutri' + (i+1)).checked = val;
+            });
+
+            // Sport
+            document.getElementById('sportCountDisplay').innerHTML = `${userData.sportSessions} <small class="fs-6 text-dim">/ 5</small>`;
+
+            // Mood
+            if(userData.mood) {
+                const btns = document.querySelectorAll('.mood-btn');
+                btns.forEach(b => {
+                    if(b.innerText.includes(getEmoji(userData.mood))) b.classList.add('active');
+                });
+            }
+
+            document.getElementById('bodyFeeling').value = userData.bodyFeeling;
+
+            updateBars();
+            updateSummary();
+        }
+
+        // --- UPDATES ---
+        function updateSleep(val) {
+            userData.sleep = val;
+            document.getElementById('sleepVal').innerText = val + 'h';
+            saveData();
+        }
+
+        function updateWeight() {
+            userData.weightCurrent = document.getElementById('weightCurrent').value;
+            saveData();
+        }
+
+        function updateNutrition() {
+            userData.nutrition = [
+                document.getElementById('nutri1').checked,
+                document.getElementById('nutri2').checked,
+                document.getElementById('nutri3').checked
+            ];
+            saveData();
+        }
+
+        function addSportSession() {
+            if(userData.sportSessions < 5) {
+                userData.sportSessions++;
+                saveData();
+            }
+        }
+
+        function setMood(mood, el) {
+            userData.mood = mood;
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            saveData();
+        }
+
+        function saveData() {
+            userData.bodyFeeling = document.getElementById('bodyFeeling').value;
+            localStorage.setItem('zenwell_goals', JSON.stringify(userData));
+            updateBars();
+            updateSummary();
+            calculateGlobalScore();
+        }
+
+        // --- LOGIC ---
+        function updateBars() {
+            // Sleep Bar (Target 8h)
+            let sleepPerc = (userData.sleep / 8) * 100;
+            document.getElementById('sleepBar').style.width = Math.min(sleepPerc, 100) + '%';
+
+            // Weight Bar
+            let diffTotal = 10; // Simple simulation range
+            let currentDiff = userData.weightCurrent - userData.weightTarget;
+            let weightPerc = 100 - (currentDiff * 10);
+            document.getElementById('weightBar').style.width = Math.max(0, Math.min(weightPerc, 100)) + '%';
+
+            // Nutrition Bar
+            let checked = userData.nutrition.filter(v => v).length;
+            document.getElementById('nutriBar').style.width = (checked / 3) * 100 + '%';
+
+            // Sport Bar
+            document.getElementById('sportBar').style.width = (userData.sportSessions / 5) * 100 + '%';
+            document.getElementById('sportCountDisplay').innerHTML = `${userData.sportSessions} <small class="fs-6 text-dim">/ 5</small>`;
+        }
+
+        function calculateGlobalScore() {
+            let s = (Math.min(userData.sleep/8, 1) * 25);
+            let n = (userData.nutrition.filter(v => v).length / 3) * 25;
+            let sp = (userData.sportSessions / 5) * 25;
+            let m = userData.mood ? 25 : 0;
+
+            let total = Math.round(s + n + sp + m);
+            
+            document.getElementById('globalScoreDisplay').innerText = total + '%';
+            document.getElementById('globalProgressBar').style.width = total + '%';
+
+            // Messages
+            const msg = document.getElementById('encouragementMsg');
+            if(total > 80) msg.innerText = "Vous êtes au sommet de votre forme ! 🚀";
+            else if(total > 50) msg.innerText = "Continuez comme ça, l'équilibre est proche. 💪";
+            else msg.innerText = "Chaque petit pas compte. On commence aujourd'hui ? ✨";
+        }
+
+        function updateSummary() {
+            document.getElementById('summarySleep').innerText = userData.sleep + 'h';
+            document.getElementById('summaryMood').innerText = getEmoji(userData.mood) || 'Non défini';
+            document.getElementById('summarySport').innerText = userData.sportSessions + ' séance' + (userData.sportSessions > 1 ? 's' : '');
+        }
+
+        function getEmoji(mood) {
+            const map = { 'great': '😃', 'okay': '😐', 'tired': '😴', 'sad': '😞' };
+            return map[mood] || null;
+        }
+
+        function resetGoals() {
+            if(confirm("Voulez-vous réinitialiser tous vos objectifs ?")) {
+                localStorage.removeItem('zenwell_goals');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
