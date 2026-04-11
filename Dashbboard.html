@@ -34,7 +34,7 @@
             font-family: 'Outfit', sans-serif;
             line-height: 1.6;
             min-height: 100vh;
-            padding-top: 80px; /* Space for fixed nav */
+            padding-top: 80px;
         }
 
         /* --- NAVIGATION --- */
@@ -58,6 +58,7 @@
             font-size: 1.4rem;
             letter-spacing: -0.5px;
             color: var(--menthe);
+            text-decoration: none;
         }
 
         .nav-links {
@@ -225,11 +226,11 @@
 <body>
 
     <nav>
-        <div class="nav-logo">ZenWell</div>
+        <a href="index.html" class="nav-logo">ZenWell</a>
         <div class="nav-links">
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">Mes cours</a>
-            <a href="#">Mes objectifs</a>
+            <a href="Dashboard.html" class="active">Dashboard</a>
+            <a href="MesCours.html">Mes cours</a>
+            <a href="MesObjectifs.html">Mes objectifs</a>
         </div>
     </nav>
 
@@ -315,7 +316,6 @@
     </div>
 
     <script>
-        // Chart configuration defaults
         Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
         Chart.defaults.font.family = 'Outfit';
 
