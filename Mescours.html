@@ -249,6 +249,7 @@
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--obsidian);
+            background-color: white;
         }
 
         /* --- FORMS & BOOKING --- */
@@ -509,7 +510,8 @@
                 benefits: "Souplesse, Éveil mental",
                 coach: "Sarah",
                 coachBg: "var(--sunlight)",
-                img: "Capture d’écran 2026-04-12 à 22.52.21.jpg"
+                coachImg: "coachsarah.jpeg",
+                img: "hathayoga.jpeg"
             },
             meditation: {
                 title: "Méditation Profonde",
@@ -519,7 +521,8 @@
                 benefits: "Sommeil, Stress-relief",
                 coach: "Marc",
                 coachBg: "var(--menthe)",
-                img: "Capture d’écran 2026-04-12 à 22.52.12.jpg"
+                coachImg: "coachmarc.jpeg",
+                img: "meditationprofonde.jpeg"
             },
             pilates: {
                 title: "Pilates Flow",
@@ -529,7 +532,8 @@
                 benefits: "Core, Équilibre",
                 coach: "Léa",
                 coachBg: "var(--sunlight)",
-                img: "Capture d’écran 2026-04-12 à 22.52.28.jpg"
+                coachImg: "coachlea.jpeg",
+                img: "pilateflow.jpeg"
             },
             wimhof: {
                 title: "Respiration Wim Hof",
@@ -539,7 +543,8 @@
                 benefits: "Focus, Immunité",
                 coach: "Marc",
                 coachBg: "var(--menthe)",
-                img: "Capture d’écran 2026-04-12 à 22.52.12.jpg"
+                coachImg: "coachmarc.jpeg",
+                img: "respirationwimhof.jpeg"
             },
             yin: {
                 title: "Yin Yoga",
@@ -549,7 +554,8 @@
                 benefits: "Détente, Flexibilité",
                 coach: "Sarah",
                 coachBg: "var(--sunlight)",
-                img: "Capture d’écran 2026-04-12 à 22.52.21.jpg"
+                coachImg: "coachsarah.jpeg",
+                img: "yin yoga.jpeg"
             }
         };
 
@@ -559,20 +565,22 @@
             const data = coursesData[courseId];
             currentCourse = data;
             
-            // Fill content
             document.getElementById('modalTitle').innerText = data.title;
             document.getElementById('modalMeta').innerText = data.meta;
             document.getElementById('modalDesc').innerText = data.desc;
             document.getElementById('modalDur').innerText = data.duration;
             document.getElementById('modalBen').innerText = data.benefits;
             document.getElementById('coachName').innerText = `Coach ${data.coach}`;
+            
+            // Image du cours
             document.getElementById('modalHeaderImg').style.backgroundImage = `url('${data.img}')`;
             
-            // Coach style
+            // Image du coach
+            document.getElementById('coachImg').src = data.coachImg;
+            
             const coachSection = document.getElementById('coachSection');
             coachSection.style.background = data.coachBg;
             
-            // Reset views
             document.getElementById('courseContent').style.display = 'block';
             document.getElementById('bookingFlow').style.display = 'none';
             
