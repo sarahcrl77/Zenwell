@@ -3,108 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenWell | Mon Suivi</title>
+    <title>ZenWell | Mes Objectifs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --obsidian: #1a1a1a; /* Un peu plus profond */
+            --obsidian: #252525;
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #FFFFFF;
-            --text-dim: rgba(255, 255, 255, 0.6);
-            --accent-gradient: linear-gradient(135deg, #FEFA8F 0%, #E7FDE6 100%);
-            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
             background-color: var(--obsidian);
-            background-image: radial-gradient(circle at top right, rgba(231, 253, 230, 0.05), transparent 400px);
             color: var(--text-main);
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
             padding-top: 80px;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- TA NAVIGATION (INCHANGÉE) --- */
         nav {
-            position: fixed; top: 0; width: 100%; height: 80px;
+            position: fixed;
+            top: 0; width: 100%; height: 80px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);
+            padding: 0 5%; background: rgba(37, 37, 37, 0.8);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
             z-index: 1000;
         }
-        .nav-logo { font-weight: 600; font-size: 1.6rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); }
         .nav-links { display: flex; gap: 2.5rem; }
         .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); }
-        .nav-links a:hover { color: var(--sunlight); }
-        .nav-links a.active { color: var(--text-main); font-weight: 500; }
+        .nav-links a:hover { color: var(--sunlight); } /* Ajout d'une petite vie au survol */
+        .nav-links a.active { color: var(--text-main); font-weight: 500; position: relative; }
+        .nav-links a.active::after {
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: var(--sunlight); border-radius: 50%;
+        }
 
         /* --- LAYOUT --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 3rem 5%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 4rem 5%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
         @media (max-width: 992px) { .container { grid-template-columns: 1fr; } }
 
-        .card { 
+        h1 { font-size: 2.5rem; font-weight: 500; margin-bottom: 1rem; letter-spacing: -1px; }
+        .subtitle { color: var(--text-dim); margin-bottom: 3rem; }
+
+        /* --- INTERACTIVE FORM --- */
+        .goal-form { 
             background: var(--glass); 
             border: 1px solid var(--glass-border); 
-            border-radius: 28px; 
-            padding: 2rem; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            transition: var(--transition);
+            border-radius: 32px; 
+            padding: 2.5rem; 
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* Un peu plus de relief */
         }
-        .card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-        h1 { font-size: 2.8rem; font-weight: 500; margin-bottom: 0.5rem; letter-spacing: -1.5px; }
-        .subtitle { color: var(--text-dim); margin-bottom: 2.5rem; font-weight: 300; }
-
-        /* --- FORM ELEMENTS --- */
-        .form-section { display: none; animation: fadeIn 0.5s ease; }
+        .form-section { display: none; animation: slideIn 0.6s ease-out forwards; }
         .form-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        input[type="number"], select, textarea {
-            width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
-            padding: 1.2rem; border-radius: 16px; color: white; font-family: inherit;
-            margin-bottom: 1.5rem; outline: none; transition: var(--transition);
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        label { display: block; color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; margin-top: 1.5rem; }
+
+        input[type="number"], input[type="range"], textarea {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            padding: 1rem; border-radius: 12px; color: white; font-family: inherit; font-size: 1.1rem;
+            margin-bottom: 1rem; outline: none; transition: var(--transition);
         }
-        input:focus { border-color: var(--sunlight); box-shadow: 0 0 15px rgba(254, 250, 143, 0.1); }
+        input:focus { border-color: var(--sunlight); background: rgba(255,255,255,0.08); }
 
-        /* --- INTERFACE SUIVI (DAILY) --- */
-        #daily-tracker { display: none; } /* Caché par défaut */
-        
-        .grid-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
-        .option-box { 
-            padding: 15px; border-radius: 16px; border: 1px solid var(--glass-border); 
-            text-align: center; cursor: pointer; transition: var(--transition); font-size: 0.9rem;
+        /* Stress & Options Selector */
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+        .option-item {
+            padding: 12px; text-align: center; border-radius: 12px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            cursor: pointer; transition: var(--transition); font-size: 0.9rem;
         }
-        .option-box:hover { background: rgba(255,255,255,0.05); }
-        .option-box.selected { background: var(--sunlight); color: var(--obsidian); font-weight: 600; }
+        .option-item:hover { background: rgba(255,255,255,0.1); }
+        .option-item.selected { background: var(--menthe); color: var(--obsidian); border-color: var(--menthe); font-weight: 500; }
 
-        .week-tracking { display: flex; justify-content: space-between; margin-top: 1rem; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 20px; }
-        .day-dot { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; cursor: pointer; }
-        .day-dot.done { background: var(--menthe); border-color: var(--menthe); color: var(--obsidian); }
+        /* Weekly Tracking Dots */
+        .week-dots { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; margin-top: 10px; }
+        .dot { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; transition: 0.3s; }
+        .dot.active { background: var(--sunlight); color: var(--obsidian); border-color: var(--sunlight); }
 
-        /* --- BUTTONS --- */
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
         .btn {
-            padding: 16px 32px; border-radius: 18px; border: none; cursor: pointer;
-            font-family: inherit; font-weight: 600; transition: var(--transition);
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 14px 28px; border-radius: 16px; border: none; cursor: pointer;
+            font-family: inherit; font-weight: 500; transition: var(--transition);
         }
-        .btn-next { background: var(--accent-gradient); color: var(--obsidian); }
-        .btn-next:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(254, 250, 143, 0.2); }
-        
-        /* --- PROGRESS CIRCLE --- */
-        .progress-circle-container { width: 180px; height: 180px; margin: 0 auto 2rem; position: relative; }
-        svg { transform: rotate(-90deg); width: 180px; height: 180px; }
-        circle { fill: none; stroke-width: 10; stroke-linecap: round; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn-next { background: var(--sunlight); color: var(--obsidian); }
+        .btn-prev { background: transparent; color: var(--text-dim); border: 1px solid var(--glass-border); }
+        .btn-save { background: var(--menthe); color: var(--obsidian); width: 100%; }
+
+        /* --- VISUAL TRACKING --- */
+        .tracking-panel { position: sticky; top: 120px; }
+        .progress-circle-container { width: 200px; height: 200px; margin: 0 auto 2rem; position: relative; display: flex; align-items: center; justify-content: center; }
+        svg { transform: rotate(-90deg); width: 200px; height: 200px; }
+        circle { fill: none; stroke-width: 8; stroke-linecap: round; }
         .bg-circle { stroke: var(--glass-border); }
-        .prog-circle { stroke: var(--sunlight); stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 1s ease; }
+        .prog-circle { stroke: var(--sunlight); stroke-dasharray: 565; stroke-dashoffset: 565; transition: stroke-dashoffset 1s ease; }
+        .percentage { position: absolute; font-size: 2rem; font-weight: 600; }
+
+        .insight-card { background: linear-gradient(135deg, rgba(231, 253, 230, 0.05) 0%, rgba(255,255,255,0) 100%); border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.5rem; margin-top: 2rem; }
+        .insight-card p { color: var(--menthe); font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -112,121 +124,120 @@
     <nav>
         <div class="nav-logo">ZenWell</div>
         <div class="nav-links">
-            <a href="#">Dashboard</a>
-            <a href="#" class="active">Mon Suivi</a>
-            <a href="#">Profil</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="Mescours.html">Mes cours</a>
+            <a href="Mesobjectifs.html" class="active">Mes objectifs</a>
         </div>
     </nav>
 
     <div class="container">
-        
         <main>
-            <div id="setup-goals">
+            <div id="section-objectifs">
                 <h1>Définir votre cap.</h1>
-                <p class="subtitle">Personnalisez votre programme en 3 étapes.</p>
+                <p class="subtitle">Répondez à ces questions pour commencer.</p>
 
-                <div class="card">
+                <div class="goal-form">
                     <div class="form-section active" id="step1">
-                        <label style="color: var(--sunlight); font-size: 0.7rem; letter-spacing: 2px;">ÉTAPE 01</label>
-                        <h2 style="margin: 10px 0 20px;">Objectif Physique</h2>
-                        <p style="margin-bottom: 1rem; color: var(--text-dim);">Quel est votre poids cible (kg) ?</p>
-                        <input type="number" id="target-weight" placeholder="Ex: 75">
-                        <button class="btn btn-next" onclick="nextStep(2)">Suivant →</button>
+                        <label>Objectif Physique</label>
+                        <p style="margin-bottom: 1.5rem;">Quel est votre poids cible ? (kg)</p>
+                        <input type="number" id="targetWeight" placeholder="Ex: 75">
+                        <div class="btn-group">
+                            <button class="btn btn-next" onclick="nextStep(2)">Continuer</button>
+                        </div>
                     </div>
 
                     <div class="form-section" id="step2">
-                        <label style="color: var(--sunlight); font-size: 0.7rem; letter-spacing: 2px;">ÉTAPE 02</label>
-                        <h2 style="margin: 10px 0 20px;">Activité</h2>
-                        <p style="margin-bottom: 1rem; color: var(--text-dim);">Combien de séances de sport par semaine ?</p>
-                        <input type="number" id="weekly-sessions" placeholder="Ex: 4">
-                        <button class="btn btn-next" onclick="nextStep(3)">Dernière étape →</button>
+                        <label>Activité Physique</label>
+                        <p style="margin-bottom: 1.5rem;">Nombre de séances souhaitées par semaine ?</p>
+                        <input type="number" id="sessionsGoal" placeholder="Ex: 4">
+                        <div class="btn-group">
+                            <button class="btn btn-prev" onclick="nextStep(1)">Retour</button>
+                            <button class="btn btn-next" onclick="nextStep(3)">Continuer</button>
+                        </div>
                     </div>
 
                     <div class="form-section" id="step3">
-                        <label style="color: var(--sunlight); font-size: 0.7rem; letter-spacing: 2px;">ÉTAPE 03</label>
-                        <h2 style="margin: 10px 0 20px;">Sommeil</h2>
-                        <p style="margin-bottom: 1rem; color: var(--text-dim);">Objectif d'heures par nuit ?</p>
-                        <input type="number" id="target-sleep" value="8">
-                        <button class="btn btn-next" style="width: 100%; background: var(--menthe);" onclick="finishSetup()">Finaliser mon profil</button>
+                        <label>Sommeil</label>
+                        <p style="margin-bottom: 1.5rem;">Heures de sommeil idéales ?</p>
+                        <input type="number" id="sleepGoal" value="8">
+                        <div class="btn-group">
+                            <button class="btn btn-prev" onclick="nextStep(2)">Retour</button>
+                            <button class="btn btn-save" onclick="finishGoals()">Enregistrer les objectifs</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="daily-tracker">
-                <h1>Bonjour ! ✨</h1>
-                <p class="subtitle">Comment s'est passée votre journée ?</p>
+            <div id="section-suivi" style="display: none;">
+                <h1>Mon Suivi du Jour</h1>
+                <p class="subtitle">Enregistrez vos efforts du jour.</p>
 
-                <div class="card">
-                    <div class="input-group">
-                        <label style="display:block; margin-bottom:10px;">Sommeil de la nuit dernière</label>
-                        <input type="number" id="daily-sleep" placeholder="Nombre d'heures">
+                <div class="goal-form">
+                    <label>Repos & Sommeil</label>
+                    <p style="margin-bottom: 10px; font-size: 0.9rem;">Combien d'heures avez-vous dormi ?</p>
+                    <input type="number" placeholder="Ex: 7.5">
+
+                    <label>Humeur & Stress</label>
+                    <div class="options-grid">
+                        <div class="option-item" onclick="toggleSelect(this)">Serein</div>
+                        <div class="option-item" onclick="toggleSelect(this)">Moyen</div>
+                        <div class="option-item" onclick="toggleSelect(this)">Stressé</div>
                     </div>
 
-                    <label style="display:block; margin-bottom:10px;">Humeur & Stress</label>
-                    <div class="grid-options">
-                        <div class="option-box" onclick="selectOption(this, 'mood')">Serein</div>
-                        <div class="option-box" onclick="selectOption(this, 'mood')">Fatigué</div>
-                        <div class="option-box" onclick="selectOption(this, 'mood')">Stressé</div>
-                        <div class="option-box" onclick="selectOption(this, 'mood')">Énergique</div>
+                    <label>Séance de sport</label>
+                    <p style="margin-bottom: 10px; font-size: 0.9rem;">Avez-vous fait une séance aujourd'hui ?</p>
+                    <div class="options-grid">
+                        <div class="option-item" onclick="showSport(true, this)">Oui</div>
+                        <div class="option-item" onclick="showSport(false, this)">Non</div>
                     </div>
 
-                    <label style="display:block; margin-bottom:10px;">Séance de sport aujourd'hui ?</label>
-                    <div class="grid-options">
-                        <div class="option-box" onclick="toggleSport(this)">Oui, j'ai tout donné</div>
-                        <div class="option-box" onclick="toggleSport(this)">Repos</div>
-                    </div>
-                    
-                    <div id="sport-details" style="display:none;">
-                        <textarea placeholder="Qu'avez-vous pratiqué ? (Muscu, Yoga, Course...)" rows="2"></textarea>
-                        <label style="display:block; margin-bottom:10px;">Courbatures ?</label>
-                        <div class="grid-options">
-                            <div class="option-box" onclick="selectOption(this, 'sore')">Aucune</div>
-                            <div class="option-box" onclick="selectOption(this, 'sore')">Légères</div>
-                            <div class="option-box" onclick="selectOption(this, 'sore')">Intenses</div>
+                    <div id="details-sport" style="display: none;">
+                        <label>Détails du sport</label>
+                        <textarea placeholder="Ex: Musculation, 1h de cardio..." rows="2"></textarea>
+                        
+                        <label>Courbatures</label>
+                        <div class="options-grid">
+                            <div class="option-item" onclick="toggleSelect(this)">Aucune</div>
+                            <div class="option-item" onclick="toggleSelect(this)">Légères</div>
+                            <div class="option-item" onclick="toggleSelect(this)">Fortes</div>
                         </div>
                     </div>
 
-                    <button class="btn btn-next" style="width: 100%; margin-top: 1rem;" onclick="saveDaily()">Enregistrer ma journée</button>
-                </div>
+                    <label>Tracking de la semaine (Séances)</label>
+                    <div class="week-dots" id="weekTracker">
+                        <div class="dot" onclick="this.classList.toggle('active')">L</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">J</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">V</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">S</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">D</div>
+                    </div>
 
-                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Tracking Hebdomadaire</h3>
-                <div class="week-tracking">
-                    <div class="day-dot" onclick="this.classList.toggle('done')">L</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">M</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">M</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">J</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">V</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">S</div>
-                    <div class="day-dot" onclick="this.classList.toggle('done')">D</div>
+                    <button class="btn btn-save" style="margin-top: 2rem;" onclick="alert('Données sauvegardées !')">Valider ma journée</button>
                 </div>
-                <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 10px; text-align: center;">Cliquez sur les jours où vous avez complété une séance.</p>
             </div>
         </main>
 
         <aside class="tracking-panel">
-            <div class="card" style="text-align: center;">
-                <div class="progress-circle-container">
-                    <svg>
-                        <circle class="bg-circle" cx="90" cy="90" r="85"></circle>
-                        <circle class="prog-circle" id="circleProgress" cx="90" cy="90" r="85"></circle>
-                    </svg>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                        <span id="percText" style="font-size: 2rem; font-weight: 600;">0%</span>
-                    </div>
-                </div>
-                <h3 id="aside-title">Initialisation...</h3>
-                <p id="aside-desc" style="color: var(--text-dim); font-size: 0.9rem; margin-top: 10px;">Complétez vos objectifs pour voir votre progression.</p>
+            <div class="progress-circle-container">
+                <svg>
+                    <circle class="bg-circle" cx="100" cy="100" r="90"></circle>
+                    <circle class="prog-circle" id="circleProgress" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="percentage" id="percText">0%</div>
             </div>
-
-            <div class="card" style="margin-top: 2rem; background: var(--accent-gradient); color: var(--obsidian);">
-                <p style="font-weight: 500;">💡 <strong>Conseil Zen :</strong> La régularité bat toujours l'intensité. Commencez doucement.</p>
+            <div style="text-align: center;">
+                <h3 id="panel-title">Configuration</h3>
+                <p id="panel-desc" style="color: var(--text-dim); font-size: 0.9rem;">Étape par étape.</p>
+            </div>
+            <div class="insight-card">
+                <p>💡 <strong>Info :</strong> Une fois vos objectifs fixés, vous pourrez suivre votre quotidien ici.</p>
             </div>
         </aside>
-
     </div>
 
     <script>
-        // Gestion des étapes du questionnaire
         function nextStep(step) {
             document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
@@ -234,39 +245,34 @@
             const circle = document.getElementById('circleProgress');
             const percText = document.getElementById('percText');
             
-            // Calcul de l'offset (Périmètre = 2 * PI * 85 ≈ 534)
-            if(step === 2) { circle.style.strokeDashoffset = 350; percText.innerText = "33%"; }
+            if(step === 1) { circle.style.strokeDashoffset = 565; percText.innerText = "0%"; }
+            if(step === 2) { circle.style.strokeDashoffset = 370; percText.innerText = "33%"; }
             if(step === 3) { circle.style.strokeDashoffset = 180; percText.innerText = "66%"; }
         }
 
-        // Fin du setup -> Passage à l'interface de suivi
-        function finishSetup() {
+        function finishGoals() {
+            // Animation finale du cercle
             document.getElementById('circleProgress').style.strokeDashoffset = 0;
             document.getElementById('percText').innerText = "100%";
             
+            // Switch d'interface
             setTimeout(() => {
-                document.getElementById('setup-goals').style.display = 'none';
-                document.getElementById('daily-tracker').style.display = 'block';
-                document.getElementById('aside-title').innerText = "Objectifs fixés !";
-                document.getElementById('aside-desc').innerText = "Remplissez votre journal quotidien pour suivre votre état de forme.";
+                document.getElementById('section-objectifs').style.display = 'none';
+                document.getElementById('section-suivi').style.display = 'block';
+                document.getElementById('panel-title').innerText = "Suivi Actif";
+                document.getElementById('panel-desc').innerText = "Semaine en cours";
             }, 600);
         }
 
-        // Sélection d'options (Boutons style toggle)
-        function selectOption(el, group) {
-            el.parentElement.querySelectorAll('.option-box').forEach(opt => opt.classList.remove('selected'));
+        function toggleSelect(el) {
+            const parent = el.parentElement;
+            parent.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
             el.classList.add('selected');
         }
 
-        // Toggle pour afficher le sport
-        function toggleSport(el) {
-            selectOption(el, 'sport');
-            const details = document.getElementById('sport-details');
-            details.style.display = el.innerText.includes('Oui') ? 'block' : 'none';
-        }
-
-        function saveDaily() {
-            alert("Données enregistrées ! Continuez ainsi. ✨");
+        function showSport(show, el) {
+            toggleSelect(el);
+            document.getElementById('details-sport').style.display = show ? 'block' : 'none';
         }
     </script>
 </body>
