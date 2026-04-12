@@ -41,62 +41,55 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            filter: blur(60px); /* Légère réduction du flou pour mieux voir les mouvements */
-            opacity: 0.7;
+            filter: blur(30px); /* Flou très réduit pour bien voir les ronds */
+            opacity: 0.8;
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            /* Animation plus nerveuse et variée */
-            animation: breathe 12s infinite alternate ease-in-out;
+            /* Animation beaucoup plus ample */
+            animation: moveAround 10s infinite alternate ease-in-out;
+            mix-blend-mode: screen;
         }
 
-        /* Les 4 Ronds (un de chaque couleur de chaque côté) */
+        /* 4 Ronds bien distincts qui bougent partout */
         .blob-1 {
-            width: 450px;
-            height: 450px;
+            width: 400px; height: 400px;
             background: var(--sunlight);
-            top: -10%;
-            left: -10%;
-            animation-duration: 15s;
+            top: 0%; left: 0%;
+            animation-duration: 8s;
         }
 
         .blob-2 {
-            width: 550px;
-            height: 550px;
+            width: 450px; height: 450px;
             background: var(--menthe);
-            bottom: -15%;
-            right: -10%;
-            animation-duration: 18s;
+            bottom: 0%; right: 0%;
+            animation-duration: 12s;
             animation-delay: -2s;
         }
 
         .blob-3 {
-            width: 350px;
-            height: 350px;
+            width: 300px; height: 300px;
             background: var(--sunlight);
-            bottom: -10%;
-            left: -5%;
-            animation-duration: 20s;
-            animation-delay: -5s;
+            bottom: 0%; left: 0%;
+            animation-duration: 15s;
+            animation-delay: -4s;
         }
 
         .blob-4 {
-            width: 400px;
-            height: 400px;
+            width: 350px; height: 350px;
             background: var(--menthe);
-            top: -5%;
-            right: -5%;
-            animation-duration: 14s;
-            animation-delay: -8s;
+            top: 0%; right: 0%;
+            animation-duration: 9s;
+            animation-delay: -6s;
         }
 
-        @keyframes breathe {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33% { transform: translate(15%, 15%) scale(1.2) rotate(10deg); }
-            66% { transform: translate(-10%, 20%) scale(0.8) rotate(-15deg); }
-            100% { transform: translate(5%, -10%) scale(1.1) rotate(5deg); }
+        /* Mouvement de grande amplitude */
+        @keyframes moveAround {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40vw, 30vh) scale(1.3); }
+            100% { transform: translate(-10vw, 50vh) scale(0.9); }
         }
 
         /* --- Main Content --- */
@@ -106,61 +99,61 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3rem;
+            gap: 4rem;
         }
 
-        /* Logo plus gros avec effet de flottement et d'éclat */
+        /* Logo ÉNORME avec animation de "respiration" et éclat */
         .logo-container {
-            width: 420px; /* Augmenté de 280px à 420px */
+            width: 550px; /* Taille massive */
             transition: var(--transition);
-            animation: fadeIn 2s ease-out, floatLogo 6s infinite ease-in-out;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+            animation: fadeIn 2s ease-out, logoPulse 4s infinite ease-in-out;
         }
 
         .logo-container img {
             width: 100%;
             height: auto;
             display: block;
+            filter: drop-shadow(0 0 20px rgba(231, 253, 230, 0.3)); /* Éclat sous le logo */
         }
 
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.2); }
         }
 
         .cta-button {
             position: relative;
             background: transparent;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 18px 40px;
-            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 22px 50px;
+            font-size: 1.3rem;
             font-weight: 500;
             border-radius: 50px;
             cursor: pointer;
             text-decoration: none;
             transition: var(--transition);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             overflow: hidden;
-            animation: fadeIn 2s ease-out 0.5s both;
+            animation: fadeIn 2s ease-out 0.8s both;
         }
 
         .cta-button:hover {
             border-color: var(--menthe);
             color: var(--obsidian);
             background: var(--menthe);
-            box-shadow: 0 0 30px rgba(231, 253, 230, 0.4);
-            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(231, 253, 230, 0.6);
+            transform: scale(1.1);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .logo-container { width: 280px; }
-            .cta-button { padding: 15px 30px; font-size: 1rem; }
+            .logo-container { width: 300px; }
+            .cta-button { padding: 15px 30px; font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -169,7 +162,9 @@
     <div class="bg-wrapper">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div> <div class="blob blob-4"></div> </div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+    </div>
 
     <main>
         <div class="logo-container">
