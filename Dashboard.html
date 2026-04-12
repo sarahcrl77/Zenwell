@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenWell | Dashboard</title>
+    <title>ZenWell | Mes Objectifs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -15,356 +14,246 @@
             --sunlight: #FEFA8F;
             --menthe: #E7FDE6;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #FFFFFF;
-            --text-dim: rgba(255, 255, 255, 0.6);
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
             background-color: var(--obsidian);
             color: var(--text-main);
             font-family: 'Outfit', sans-serif;
-            line-height: 1.6;
             min-height: 100vh;
             padding-top: 80px;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION ORIGINALE --- */
         nav {
             position: fixed;
-            top: 0;
-            width: 100%;
-            height: 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            background: rgba(37, 37, 37, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
+            top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: rgba(37, 37, 37, 0.8);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
             z-index: 1000;
         }
-
-        .nav-logo {
-            font-weight: 600;
-            font-size: 1.4rem;
-            letter-spacing: -0.5px;
-            color: var(--menthe);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            font-weight: 400;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-main);
-        }
-
-        .nav-links a.active {
-            font-weight: 500;
-            position: relative;
-        }
-
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); }
+        .nav-links { display: flex; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a.active { color: var(--text-main); font-weight: 500; position: relative; }
         .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: var(--sunlight);
-            border-radius: 50%;
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: var(--sunlight); border-radius: 50%;
         }
 
         /* --- LAYOUT --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 5%;
+        .container { max-width: 1100px; margin: 0 auto; padding: 4rem 5%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; }
+        @media (max-width: 992px) { .container { grid-template-columns: 1fr; } }
+
+        h1 { font-size: 2.5rem; font-weight: 500; margin-bottom: 1rem; letter-spacing: -1px; }
+        .subtitle { color: var(--text-dim); margin-bottom: 3rem; }
+
+        /* --- INTERACTIVE FORM --- */
+        .goal-form { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 32px; padding: 2.5rem; position: relative; }
+
+        .form-section { display: none; animation: slideIn 0.6s ease-out forwards; }
+        .form-section.active { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        label { display: block; color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; margin-top: 1.5rem; }
+
+        input[type="number"], textarea {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            padding: 1rem; border-radius: 12px; color: white; font-family: inherit; font-size: 1.1rem;
+            margin-bottom: 1rem; outline: none; transition: var(--transition);
         }
+        input:focus { border-color: var(--sunlight); }
 
-        header {
-            margin-bottom: 3rem;
+        /* Options Selector */
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+        .option-item {
+            padding: 12px; text-align: center; border-radius: 12px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            cursor: pointer; transition: var(--transition); font-size: 0.9rem;
         }
+        .option-item.selected { background: var(--menthe); color: var(--obsidian); border-color: var(--menthe); }
 
-        header h1 {
-            font-size: 2rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+        /* Weekly Tracker */
+        .week-dots { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; }
+        .dot { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; }
+        .dot.active { background: var(--sunlight); color: var(--obsidian); border-color: var(--sunlight); }
+
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn {
+            padding: 14px 28px; border-radius: 16px; border: none; cursor: pointer;
+            font-family: inherit; font-weight: 500; transition: var(--transition);
         }
-
-        header p {
-            color: var(--text-dim);
+        .btn-next { background: var(--sunlight); color: var(--obsidian); }
+        .btn-prev { background: transparent; color: var(--text-dim); border: 1px solid var(--glass-border); }
+        .btn-save { background: var(--menthe); color: var(--obsidian); width: 100%; }
+        
+        /* Nouveau bouton modifier */
+        .btn-modify { 
+            background: transparent; color: var(--text-dim); border: 1px dashed var(--glass-border); 
+            margin-top: 1rem; width: 100%; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
         }
+        .btn-modify:hover { border-color: var(--sunlight); color: var(--sunlight); }
 
-        /* --- KPI GRID --- */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+        /* --- VISUAL TRACKING --- */
+        .tracking-panel { position: sticky; top: 120px; }
+        .progress-circle-container { width: 200px; height: 200px; margin: 0 auto 2rem; position: relative; display: flex; align-items: center; justify-content: center; }
+        svg { transform: rotate(-90deg); width: 200px; height: 200px; }
+        circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .bg-circle { stroke: var(--glass-border); }
+        .prog-circle { stroke: var(--sunlight); stroke-dasharray: 565; stroke-dashoffset: 565; transition: stroke-dashoffset 1s ease; }
+        .percentage { position: absolute; font-size: 2rem; font-weight: 600; }
 
-        .card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 1.8rem;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .kpi-label {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .kpi-value {
-            font-size: 2.2rem;
-            font-weight: 500;
-            display: flex;
-            align-items: baseline;
-            gap: 0.5rem;
-        }
-
-        .kpi-unit {
-            font-size: 1rem;
-            color: var(--text-dim);
-        }
-
-        /* --- INSIGHT BLOCK --- */
-        .insight-banner {
-            background: linear-gradient(90deg, rgba(231, 253, 230, 0.1) 0%, rgba(37, 37, 37, 0) 100%);
-            border-left: 3px solid var(--menthe);
-            padding: 1.5rem;
-            border-radius: 0 16px 16px 0;
-            margin-bottom: 3rem;
-        }
-
-        .insight-banner p {
-            color: var(--menthe);
-            font-weight: 400;
-        }
-
-        /* --- CHARTS SECTION --- */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (max-width: 992px) {
-            .charts-row { grid-template-columns: 1fr; }
-        }
-
-        /* --- DATA TABLE --- */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th {
-            text-align: left;
-            color: var(--text-dim);
-            font-weight: 400;
-            padding: 1rem;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 0.9rem;
-        }
-
-        td {
-            padding: 1.2rem 1rem;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 0.95rem;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .status-success { color: var(--menthe); background: rgba(231, 253, 230, 0.1); }
-
+        .insight-card { background: linear-gradient(135deg, rgba(231, 253, 230, 0.05) 0%, rgba(255,255,255,0) 100%); border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.5rem; margin-top: 2rem; }
+        .insight-card p { color: var(--menthe); font-size: 0.95rem; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html" class="nav-logo">ZenWell</a>
+        <div class="nav-logo">ZenWell</div>
         <div class="nav-links">
-            <a href="Dashboard.html" class="active">Dashboard</a>
+            <a href="Dashboard.html">Dashboard</a>
             <a href="Mescours.html">Mes cours</a>
-            <a href="Mesobjectifs.html">Mes objectifs</a>
+            <a href="Mesobjectifs.html" class="active">Mes objectifs</a>
         </div>
     </nav>
 
     <div class="container">
-        <header>
-            <h1>Bonjour, Alex</h1>
-            <p>Voici votre aperçu bien-être pour aujourd'hui.</p>
-        </header>
+        <main>
+            <div id="section-objectifs">
+                <h1>Définir votre cap.</h1>
+                <p class="subtitle">Répondez à ces questions pour commencer.</p>
 
-        <div class="insight-banner">
-            <p>✨ <strong>Conseil du jour :</strong> Prenez le temps de récupérer aujourd’hui. Votre équilibre est en progression constante cette semaine.</p>
-        </div>
+                <div class="goal-form">
+                    <div class="form-section active" id="step1">
+                        <label>Objectif Physique</label>
+                        <p style="margin-bottom: 1.5rem;">Poids cible (kg)</p>
+                        <input type="number" placeholder="Ex: 75">
+                        <div class="btn-group"><button class="btn btn-next" onclick="nextStep(2)">Continuer</button></div>
+                    </div>
 
-        <section class="kpi-grid">
-            <div class="card">
-                <span class="kpi-label">Sessions Hebdo</span>
-                <div class="kpi-value">12 <span class="kpi-unit">/ 15</span></div>
-            </div>
-            <div class="card">
-                <span class="kpi-label">Niveau de Stress</span>
-                <div class="kpi-value" style="color: var(--menthe);">Bas</div>
-            </div>
-            <div class="card">
-                <span class="kpi-label">Récupération</span>
-                <div class="kpi-value">88<span class="kpi-unit">%</span></div>
-            </div>
-            <div class="card">
-                <span class="kpi-label">Calories</span>
-                <div class="kpi-value">2,450 <span class="kpi-unit">kcal</span></div>
-            </div>
-        </section>
+                    <div class="form-section" id="step2">
+                        <label>Activité</label>
+                        <p style="margin-bottom: 1.5rem;">Séances par semaine ?</p>
+                        <input type="number" placeholder="Ex: 4">
+                        <div class="btn-group">
+                            <button class="btn btn-prev" onclick="nextStep(1)">Retour</button>
+                            <button class="btn btn-next" onclick="nextStep(3)">Continuer</button>
+                        </div>
+                    </div>
 
-        <section class="charts-row">
-            <div class="card">
-                <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Progression de l'activité</h3>
-                <canvas id="lineChart" height="150"></canvas>
+                    <div class="form-section" id="step3">
+                        <label>Sommeil</label>
+                        <p style="margin-bottom: 1.5rem;">Heures de sommeil idéales ?</p>
+                        <input type="number" value="8">
+                        <div class="btn-group">
+                            <button class="btn btn-prev" onclick="nextStep(2)">Retour</button>
+                            <button class="btn btn-save" onclick="finishGoals()">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Focus</h3>
-                <canvas id="donutChart"></canvas>
-            </div>
-        </section>
 
-        <section class="card">
-            <h3 style="margin-bottom: 1.5rem; font-weight: 400;">Sessions Récentes</h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Durée</th>
-                            <th>Intensité</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12 Oct 2023</td>
-                            <td>Yoga Vinyasa</td>
-                            <td>45 min</td>
-                            <td>Modérée</td>
-                            <td><span class="status-badge status-success">Complété</span></td>
-                        </tr>
-                        <tr>
-                            <td>11 Oct 2023</td>
-                            <td>Méditation guidée</td>
-                            <td>15 min</td>
-                            <td>Basse</td>
-                            <td><span class="status-badge status-success">Complété</span></td>
-                        </tr>
-                        <tr>
-                            <td>10 Oct 2023</td>
-                            <td>HIIT Cardio</td>
-                            <td>30 min</td>
-                            <td>Élevée</td>
-                            <td><span class="status-badge status-success">Complété</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="section-suivi" style="display: none;">
+                <h1>Mon Suivi du Jour</h1>
+                <p class="subtitle">Comment s'est passée votre journée ?</p>
+
+                <div class="goal-form">
+                    <label>Sommeil réel</label>
+                    <input type="number" placeholder="Nombre d'heures">
+
+                    <label>Humeur</label>
+                    <div class="options-grid">
+                        <div class="option-item" onclick="toggleSelect(this)">Serein</div>
+                        <div class="option-item" onclick="toggleSelect(this)">Stressé</div>
+                    </div>
+
+                    <label>Sport aujourd'hui ?</label>
+                    <div class="options-grid">
+                        <div class="option-item" onclick="showSport(true, this)">Oui</div>
+                        <div class="option-item" onclick="showSport(false, this)">Non</div>
+                    </div>
+
+                    <div id="details-sport" style="display: none;">
+                        <textarea placeholder="Type de sport..." rows="2"></textarea>
+                        <label>Courbatures</label>
+                        <div class="options-grid">
+                            <div class="option-item" onclick="toggleSelect(this)">Oui</div>
+                            <div class="option-item" onclick="toggleSelect(this)">Non</div>
+                        </div>
+                    </div>
+
+                    <label>Tracking de la semaine</label>
+                    <div class="week-dots">
+                        <div class="dot" onclick="this.classList.toggle('active')">L</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">J</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">V</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">S</div>
+                        <div class="dot" onclick="this.classList.toggle('active')">D</div>
+                    </div>
+
+                    <button class="btn btn-save" style="margin-top: 1.5rem;">Valider la journée</button>
+                    
+                    <button class="btn btn-modify" onclick="modifyObjectives()">✎ Modifier mes objectifs de base</button>
+                </div>
             </div>
-        </section>
+        </main>
+
+        <aside class="tracking-panel">
+            <div class="progress-circle-container">
+                <svg><circle class="bg-circle" cx="100" cy="100" r="90"></circle><circle class="prog-circle" id="circleProgress" cx="100" cy="100" r="90"></circle></svg>
+                <div class="percentage" id="percText">0%</div>
+            </div>
+            <div class="insight-card"><p>💡 <strong>Info :</strong> Vos progrès s'affichent ici.</p></div>
+        </aside>
     </div>
 
     <script>
-        Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
-        Chart.defaults.font.family = 'Outfit';
+        function nextStep(step) {
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            const offsets = [565, 370, 180, 0];
+            const percs = ["0%", "33%", "66%", "100%"];
+            document.getElementById('circleProgress').style.strokeDashoffset = offsets[step-1];
+            document.getElementById('percText').innerText = percs[step-1];
+        }
 
-        // Line Chart
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                datasets: [{
-                    label: 'Minutes Actives',
-                    data: [30, 45, 60, 35, 90, 120, 40],
-                    borderColor: '#FEFA8F',
-                    backgroundColor: 'rgba(254, 250, 143, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, border: { display: false } },
-                    x: { grid: { display: false }, border: { display: false } }
-                }
-            }
-        });
+        function finishGoals() {
+            document.getElementById('circleProgress').style.strokeDashoffset = 0;
+            document.getElementById('percText').innerText = "100%";
+            setTimeout(() => {
+                document.getElementById('section-objectifs').style.display = 'none';
+                document.getElementById('section-suivi').style.display = 'block';
+            }, 500);
+        }
 
-        // Donut Chart
-        const ctxDonut = document.getElementById('donutChart').getContext('2d');
-        new Chart(ctxDonut, {
-            type: 'doughnut',
-            data: {
-                labels: ['Yoga', 'Cardio', 'Méditation'],
-                datasets: [{
-                    data: [50, 30, 20],
-                    backgroundColor: ['#E7FDE6', '#FEFA8F', 'rgba(255, 255, 255, 0.1)'],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
-                },
-                cutout: '70%'
-            }
-        });
+        // FONCTION POUR REVENIR AUX OBJECTIFS
+        function modifyObjectives() {
+            document.getElementById('section-suivi').style.display = 'none';
+            document.getElementById('section-objectifs').style.display = 'block';
+            nextStep(1); // Relance à l'étape 1
+        }
+
+        function toggleSelect(el) {
+            el.parentElement.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function showSport(show, el) {
+            toggleSelect(el);
+            document.getElementById('details-sport').style.display = show ? 'block' : 'none';
+        }
     </script>
 </body>
 </html>
