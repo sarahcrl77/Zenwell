@@ -87,6 +87,7 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 220px;
+            cursor: pointer;
         }
 
         .card:hover {
@@ -121,6 +122,8 @@
             font-weight: 500;
             font-size: 0.9rem;
             transition: var(--transition);
+            border: none;
+            cursor: pointer;
         }
 
         .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(254, 250, 143, 0.2); }
@@ -131,6 +134,9 @@
             font-size: 0.9rem;
             opacity: 0.7;
             transition: var(--transition);
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-secondary:hover { opacity: 1; }
@@ -160,9 +166,104 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- EXTENSIONS : MODAL & BOOKING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-content {
+            background: var(--obsidian);
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding-bottom: 2rem;
+        }
+
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        .modal-hero {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 31px 31px 0 0;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border: 1px solid var(--glass-border);
+            color: white; font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .modal-body { padding: 2rem; }
+        .coach-info { display: flex; align-items: center; gap: 15px; margin: 1.5rem 0; }
+        .coach-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--menthe); }
+        
+        .booking-step { display: none; }
+        .booking-step.active { display: block; animation: fadeIn 0.5s ease; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
+        .form-control {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+        }
+
+        .payment-sim {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .success-anim {
+            text-align: center;
+            padding: 2rem;
+        }
+        .checkmark {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: var(--menthe);
+            color: var(--obsidian);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; margin: 0 auto 1.5rem;
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
         @media (max-width: 768px) {
             .nav-links { display: none; }
             h2 { font-size: 1.2rem; }
+            .modal-content { width: 95%; }
         }
     </style>
 </head>
@@ -181,27 +282,27 @@
         
         <section class="upcoming">
             <h2><span>Prochainement</span> Mes rendez-vous</h2>
-            <div class="grid">
-                <div class="card">
+            <div class="grid" id="grid-upcoming">
+                <div class="card" onclick="openDetails('hatha')">
                     <div>
                         <div class="card-tag">Demain • 09:30</div>
                         <h3 class="card-title">Hatha Yoga Matinal</h3>
                         <p class="card-meta">Avec Coach Sarah • 45 min</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn-primary">Rejoindre</a>
-                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                        <button class="btn-primary" onclick="event.stopPropagation(); window.location.href='#';">Rejoindre</button>
+                        <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="openDetails('meditation')">
                     <div>
                         <div class="card-tag">14 Oct • 18:00</div>
                         <h3 class="card-title">Méditation Profonde</h3>
                         <p class="card-meta">Avec Coach Marc • 20 min</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn-secondary">Détails</a>
-                        <button class="fav-toggle active" onclick="toggleFav(this)">★</button>
+                        <button class="btn-secondary">Détails</button>
+                        <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button>
                     </div>
                 </div>
             </div>
@@ -210,26 +311,26 @@
         <section class="suggested">
             <h2><span>Inspiration</span> Recommandé pour vous</h2>
             <div class="grid">
-                <div class="card">
+                <div class="card" onclick="openDetails('pilates')">
                     <div>
                         <div class="card-tag" style="color: var(--menthe)">Nouveau</div>
                         <h3 class="card-title">Pilates Flow</h3>
                         <p class="card-meta">Renforcez votre posture et votre souffle.</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn-secondary">Découvrir</a>
-                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                        <button class="btn-primary" onclick="event.stopPropagation(); openBooking('pilates')">Réserver</button>
+                        <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="openDetails('wimhof')">
                     <div>
                         <div class="card-tag">Populaire</div>
                         <h3 class="card-title">Respiration Wim Hof</h3>
                         <p class="card-meta">Maîtrisez votre énergie vitale.</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn-secondary">Découvrir</a>
-                        <button class="fav-toggle" onclick="toggleFav(this)">★</button>
+                        <button class="btn-primary" onclick="event.stopPropagation(); openBooking('wimhof')">Réserver</button>
+                        <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button>
                     </div>
                 </div>
             </div>
@@ -238,15 +339,15 @@
         <section class="past">
             <h2><span>Historique</span> Cours terminés</h2>
             <div class="grid">
-                <div class="card">
+                <div class="card" onclick="openDetails('yin')">
                     <div>
                         <div class="card-tag">Terminé</div>
                         <h3 class="card-title">Yin Yoga</h3>
                         <p class="card-meta">8 Oct 2023 • 60 min</p>
                     </div>
                     <div class="card-footer">
-                        <span style="color: var(--menthe); font-size: 0.8rem;">✓ Complété</span>
-                        <button class="fav-toggle active" onclick="toggleFav(this)">★</button>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); openBooking('yin')">Réserver à nouveau</button>
+                        <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button>
                     </div>
                 </div>
             </div>
@@ -274,10 +375,217 @@
 
     </div>
 
+    <div id="globalModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="close-modal" onclick="closeModal()">✕</div>
+            
+            <div id="view-details">
+                <div id="modalHero" class="modal-hero"></div>
+                <div class="modal-body">
+                    <h3 id="modalTitle" class="card-title" style="font-size: 2rem;"></h3>
+                    <div class="coach-info">
+                        <img id="coachImg" src="" class="coach-img">
+                        <div>
+                            <p id="coachName" style="font-weight: 500;"></p>
+                            <p style="font-size: 0.8rem; color: var(--text-dim);">Expert ZenWell Certifié</p>
+                        </div>
+                    </div>
+                    <p id="modalDesc" style="line-height: 1.6; color: var(--text-dim); margin-bottom: 2rem;"></p>
+                    <div id="modalMeta" style="display: flex; gap: 20px; padding: 15px; background: var(--glass); border-radius: 12px; font-size: 0.9rem;">
+                    </div>
+                    <button id="modalActionBtn" class="btn-primary" style="width: 100%; margin-top: 2rem; padding: 15px;">Réserver cette séance</button>
+                </div>
+            </div>
+
+            <div id="view-booking" style="display: none;" class="modal-body">
+                <div id="step1" class="booking-step active">
+                    <h3 style="margin-bottom: 1.5rem;">Informations de réservation</h3>
+                    <div class="form-group">
+                        <label>Nom complet</label>
+                        <input type="text" class="form-control" placeholder="Votre nom">
+                    </div>
+                    <div class="form-group">
+                        <label>Date & Heure</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="date" class="form-control">
+                            <select class="form-control">
+                                <option>09:00</option>
+                                <option>11:30</option>
+                                <option>18:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;" onclick="goToStep(2)">Continuer</button>
+                </div>
+
+                <div id="step2" class="booking-step">
+                    <h3 style="margin-bottom: 1rem;">Confirmation</h3>
+                    <div style="background: var(--glass); padding: 20px; border-radius: 16px; margin-bottom: 2rem;">
+                        <p id="summaryText" style="font-size: 0.95rem; line-height: 1.6;"></p>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;" onclick="goToStep(3)">Procéder au paiement</button>
+                    <button class="btn-secondary" style="width: 100%; margin-top: 10px;" onclick="goToStep(1)">Modifier</button>
+                </div>
+
+                <div id="step3" class="booking-step">
+                    <h3 style="margin-bottom: 1.5rem;">Paiement sécurisé</h3>
+                    <div class="payment-sim">
+                        <div class="form-group">
+                            <label>Numéro de carte</label>
+                            <input type="text" class="form-control" placeholder="**** **** **** ****">
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 2;">
+                                <label>Expiration</label>
+                                <input type="text" class="form-control" placeholder="MM/YY">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>CVC</label>
+                                <input type="text" class="form-control" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="processPayment()">Payer & Confirmer</button>
+                </div>
+
+                <div id="step4" class="booking-step">
+                    <div class="success-anim">
+                        <div class="checkmark">✓</div>
+                        <h2>C'est réservé !</h2>
+                        <p style="color: var(--text-dim); margin-top: 10px;">Un e-mail de confirmation vous a été envoyé.</p>
+                        <button class="btn-primary" style="margin-top: 2rem;" onclick="closeModal()">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // --- DONNÉES DES COURS ---
+        const coursesData = {
+            hatha: {
+                title: "Hatha Yoga Matinal",
+                coach: "Sarah",
+                coachImg: "https://i.pravatar.cc/150?u=sarah",
+                bg: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+                desc: "Commencez votre journée avec une clarté mentale absolue. Ce cours se concentre sur des postures tenues et une respiration profonde pour éveiller le corps en douceur.",
+                duration: "45 min",
+                level: "Tous niveaux",
+                benefits: "Souplesse, Énergie"
+            },
+            meditation: {
+                title: "Méditation Profonde",
+                coach: "Marc",
+                coachImg: "https://i.pravatar.cc/150?u=marc",
+                bg: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+                desc: "Une immersion sonore et guidée pour relâcher les tensions accumulées. Idéal pour finir la journée dans un calme olympien.",
+                duration: "20 min",
+                level: "Débutant",
+                benefits: "Sommeil, Calme"
+            },
+            pilates: {
+                title: "Pilates Flow",
+                coach: "Elena",
+                coachImg: "https://i.pravatar.cc/150?u=elena",
+                bg: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+                desc: "Un enchaînement fluide axé sur le renforcement des muscles profonds. Améliorez votre posture tout en tonifiant votre sangle abdominale.",
+                duration: "50 min",
+                level: "Intermédiaire",
+                benefits: "Posture, Force"
+            },
+            wimhof: {
+                title: "Respiration Wim Hof",
+                coach: "Jonas",
+                coachImg: "https://i.pravatar.cc/150?u=jonas",
+                bg: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+                desc: "Apprenez à contrôler votre système nerveux par le souffle. Une technique puissante pour booster l'immunité et la résistance au stress.",
+                duration: "30 min",
+                level: "Avancé",
+                benefits: "Focus, Immunité"
+            },
+            yin: {
+                title: "Yin Yoga",
+                coach: "Chloé",
+                coachImg: "https://i.pravatar.cc/150?u=chloe",
+                bg: "https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80",
+                desc: "Le yoga de l'immobilité. Travaillez sur les tissus conjonctifs profonds par des étirements passifs de longue durée.",
+                duration: "60 min",
+                level: "Relaxant",
+                benefits: "Détente, Fascias"
+            }
+        };
+
+        let currentCourseId = '';
+
+        // --- GESTION DES MODALES ---
+        function openDetails(id) {
+            const data = coursesData[id];
+            currentCourseId = id;
+            
+            document.getElementById('modalHero').style.backgroundImage = `url(${data.bg})`;
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('coachImg').src = data.coachImg;
+            document.getElementById('coachName').innerText = `Coach ${data.coach}`;
+            document.getElementById('modalDesc').innerText = data.desc;
+            document.getElementById('modalMeta').innerHTML = `
+                <span>🕒 ${data.duration}</span>
+                <span>🔥 ${data.level}</span>
+                <span>✨ ${data.benefits}</span>
+            `;
+
+            // Action du bouton dans la modale
+            const actionBtn = document.getElementById('modalActionBtn');
+            if (id === 'hatha' || id === 'meditation') {
+                actionBtn.innerText = "Rejoindre la séance";
+                actionBtn.onclick = () => alert('Lancement du flux vidéo...');
+            } else {
+                actionBtn.innerText = "Réserver cette séance";
+                actionBtn.onclick = () => openBooking(id);
+            }
+
+            document.getElementById('view-details').style.display = 'block';
+            document.getElementById('view-booking').style.display = 'none';
+            document.getElementById('globalModal').classList.add('active');
+        }
+
+        function openBooking(id) {
+            currentCourseId = id;
+            document.getElementById('view-details').style.display = 'none';
+            document.getElementById('view-booking').style.display = 'block';
+            goToStep(1);
+            document.getElementById('globalModal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            document.getElementById('globalModal').classList.remove('active');
+        }
+
+        function goToStep(step) {
+            document.querySelectorAll('.booking-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            
+            if (step === 2) {
+                const data = coursesData[currentCourseId];
+                document.getElementById('summaryText').innerHTML = `
+                    <strong>Cours :</strong> ${data.title}<br>
+                    <strong>Coach :</strong> ${data.coach}<br>
+                    <strong>Prix :</strong> 15,00 €
+                `;
+            }
+        }
+
+        function processPayment() {
+            const btn = document.querySelector('#step3 .btn-primary');
+            btn.innerText = "Traitement...";
+            setTimeout(() => {
+                goToStep(4);
+                btn.innerText = "Payer & Confirmer";
+            }, 1500);
+        }
+
+        // --- FONCTION EXISTANTE (MAINTENUE) ---
         function toggleFav(btn) {
             btn.classList.toggle('active');
-            // Adding a small scale pop animation via JS for tactile feel
             btn.animate([
                 { transform: 'scale(1)' },
                 { transform: 'scale(1.4)' },
