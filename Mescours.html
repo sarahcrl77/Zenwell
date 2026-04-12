@@ -1,188 +1,618 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartes ZenWell - Univers Graphique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Geist:wght@400;600&family=La+Belle+Aurore&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --obsidienne: #252525;
-            --sunlight: #FEFA8F;
-            --menthe: #E7FDE6;
-            --eucalyptus: #D1E1D6;
-            --font-h1: 'Outfit', sans-serif;
-            --font-body: 'Geist', sans-serif;
-            --font-note: 'La Belle Aurore', cursive;
-        }
+<!DOCTYPE html> 
+<html lang="fr"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>ZenWell | Mes Cours</title> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"> 
+     
+    <style> 
+        :root { 
+            --obsidian: #252525; 
+            --sunlight: #FEFA8F; 
+            --menthe: #E7FDE6; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-thick: rgba(255, 255, 255, 0.07); 
+            --glass-border: rgba(255, 255, 255, 0.1); 
+            --text-main: #FFFFFF; 
+            --text-dim: rgba(255, 255, 255, 0.5); 
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+        } 
 
-        body {
-            background-color: var(--obsidienne);
-            color: white;
-            font-family: var(--font-body);
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased; 
+        } 
+
+        body { 
+            background-color: var(--obsidian); 
+            color: var(--text-main); 
+            font-family: 'Outfit', sans-serif; 
+            min-height: 100vh; 
+            padding-top: 100px; 
+            padding-bottom: 100px; 
+            overflow-x: hidden;
+        } 
+
+        /* --- NAVIGATION --- */ 
+        nav { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 80px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0 5%; 
+            background: rgba(37, 37, 37, 0.8); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid var(--glass-border); 
+            z-index: 1000; 
+        } 
+
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); } 
+        .nav-links { display: flex; gap: 2.5rem; } 
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); } 
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); } 
+        .nav-links a.active { font-weight: 500; position: relative; } 
+        .nav-links a.active::after { 
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); 
+            width: 4px; height: 4px; background: var(--sunlight); border-radius: 50%; 
+        } 
+
+        /* --- LAYOUT --- */ 
+        .main-wrapper { display: flex; max-width: 1600px; margin: 0 auto; padding: 0 5%; gap: 40px; }
+        .container { flex: 1; max-width: 1100px; } 
+         
+        section { margin-bottom: 5rem; animation: fadeIn 0.8s ease-out both; } 
+        section:nth-child(2) { animation-delay: 0.2s; } 
+        section:nth-child(3) { animation-delay: 0.4s; } 
+
+        h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; } 
+        h2 span { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; } 
+
+        /* --- IMMERSIVE VIDEOS SIDEBAR --- */
+        .immersive-sidebar {
+            width: 350px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 150px);
         }
-
-        .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+        .video-container {
             width: 100%;
-        }
-
-        .card {
-            background-color: #1a1a1a;
-            border-radius: 20px;
+            height: 48%;
+            border-radius: 28px;
             overflow: hidden;
+            border: 1px solid var(--glass-border);
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(231, 253, 230, 0.1);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Image avec traitement Clair-Obscur */
-        .card-image {
+        .video-container video {
             width: 100%;
-            height: 250px;
+            height: 100%;
             object-fit: cover;
-            filter: brightness(0.7) contrast(1.1) grayscale(0.2);
-            border-bottom: 2px solid var(--sunlight);
+            opacity: 0.6;
+            transition: var(--transition);
         }
+        .video-container:hover video { opacity: 0.9; transform: scale(1.05); }
 
-        .card-content {
-            padding: 25px;
-        }
+        /* --- CARDS SYSTEM --- */ 
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; } 
 
-        .card-category {
-            font-family: var(--font-body);
-            color: var(--menthe);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            display: block;
-        }
+        .card { 
+            background: var(--glass); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 28px; 
+            padding: 1.5rem; 
+            position: relative; 
+            transition: var(--transition); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            min-height: 240px; 
+            cursor: pointer;
+            overflow: hidden;
+        } 
 
-        .card-title {
-            font-family: var(--font-h1);
-            font-size: 1.8rem;
-            color: var(--sunlight);
-            margin: 0 0 15px 0;
-            line-height: 1.1;
-        }
+        .card:hover { 
+            background: var(--glass-thick); 
+            border-color: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.02);
+        } 
 
-        .card-description {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--eucalyptus);
-            margin-bottom: 20px;
-        }
+        .card-tag { 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            width: fit-content; 
+            margin-bottom: 1rem; 
+            background: rgba(255, 255, 255, 0.05); 
+            color: var(--text-dim); 
+        } 
 
-        .coach-note {
-            font-family: var(--font-note);
-            color: var(--menthe);
-            font-size: 1.2rem;
-            margin-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
-        }
+        .card-title { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; } 
+        .card-meta { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.5rem; } 
 
-        /* Croix de fermeture repositionnée plus bas */
-        .close-btn {
-            position: absolute;
-            top: 25px; /* Redescendue pour ne pas être coupée */
-            right: 25px;
-            width: 35px;
-            height: 35px;
-            background: rgba(37, 37, 37, 0.8);
-            border-radius: 50%;
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; } 
+
+        /* --- CTA BUTTONS --- */ 
+        .btn-primary { 
+            background: var(--sunlight); 
+            color: var(--obsidian); 
+            padding: 12px 24px; 
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            transition: var(--transition); 
+            border: none;
+            cursor: pointer;
+        } 
+
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(254, 250, 143, 0.2); } 
+
+        .btn-secondary { 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            opacity: 0.7; 
+            transition: var(--transition); 
+            background: none;
+            border: none;
+            cursor: pointer;
+        } 
+
+        .btn-secondary:hover { opacity: 1; } 
+
+        /* --- FAVORITE ICON --- */ 
+        .fav-toggle { 
+            cursor: pointer; 
+            font-size: 1.4rem; 
+            color: var(--text-dim); 
+            transition: var(--transition); 
+            background: none; 
+            border: none; 
+        } 
+        .fav-toggle.active { color: var(--sunlight); transform: scale(1.2); } 
+
+        /* --- SECTIONS SPECIFICS --- */ 
+        .upcoming .card { border-left: 4px solid var(--sunlight); background: linear-gradient(145deg, rgba(254, 250, 143, 0.05) 0%, rgba(255,255,255,0.02) 100%); } 
+         
+        .past .card { opacity: 0.8; } 
+        .past .card:hover { opacity: 1; } 
+
+        .suggested .card { border-bottom: 4px solid var(--menthe); } 
+
+        /* --- MODAL SYSTEM --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            border: 1px solid var(--sunlight);
-            color: var(--sunlight);
-            font-size: 20px;
-            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-content {
+            background: var(--obsidian);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9) translateY(20px);
+            transition: var(--transition);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+        .modal-header-img {
+            height: 300px;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .modal-body { padding: 40px; overflow-y: auto; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
+        
+        .coach-profile {
+            background: var(--menthe);
+            border-radius: 20px;
+            padding: 20px;
+            color: var(--obsidian);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+        .coach-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--obsidian);
         }
 
-        .close-btn:hover {
-            background: var(--sunlight);
-            color: var(--obsidienne);
+        /* --- FORMS & BOOKING --- */
+        .booking-step { display: none; }
+        .booking-step.active { display: block; animation: fadeIn 0.5s ease; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
+        input, select {
+            width: 100%;
+            background: var(--glass-thick);
+            border: 1px solid var(--glass-border);
+            padding: 14px;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+        }
+        .summary-box { background: var(--glass); padding: 20px; border-radius: 16px; margin-bottom: 20px; }
+        
+        /* Success Animation */
+        .success-circle {
+            width: 80px; height: 80px; border-radius: 50%; background: var(--menthe);
+            margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+            color: var(--obsidian); font-size: 2rem;
         }
 
-        .tag {
-            display: inline-block;
-            background: rgba(231, 253, 230, 0.1);
-            color: var(--menthe);
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            margin-right: 5px;
-        }
-    </style>
-</head>
-<body>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } 
 
-<div class="card-container">
-    
-    <div class="card">
-        <div class="close-btn">&times;</div>
-        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800" alt="Respiration consciente" class="card-image">
-        <div class="card-content">
-            <span class="card-category">Somatique</span>
-            <h2 class="card-title">Respiration Consciente</h2>
-            <p class="card-description">Retrouvez votre équilibre biologique par la maîtrise du souffle. Une immersion dans la pénombre pour favoriser l'introspection.</p>
-            <div>
-                <span class="tag">15 min</span>
-                <span class="tag">Calme</span>
+        @media (max-width: 1100px) {
+            .immersive-sidebar { display: none; }
+        }
+        @media (max-width: 768px) { 
+            .nav-links { display: none; } 
+            h2 { font-size: 1.2rem; } 
+            .modal-grid { grid-template-columns: 1fr; }
+        } 
+    </style> 
+</head> 
+<body> 
+
+    <nav> 
+        <div class="nav-logo">ZenWell</div> 
+        <div class="nav-links"> 
+            <a href="Dashboard.html">Dashboard</a> 
+            <a href="Mescours.html" class="active">Mes cours</a> 
+            <a href="Mesobjectifs.html">Mes objectifs</a> 
+        </div> 
+    </nav> 
+
+    <div class="main-wrapper">
+        <div class="container"> 
+             
+            <section class="upcoming"> 
+                <h2><span>Prochainement</span> Mes rendez-vous</h2> 
+                <div class="grid"> 
+                    <div class="card" onclick="openModal('hatha')"> 
+                        <div> 
+                            <div class="card-tag">Demain • 09:30</div> 
+                            <h3 class="card-title">Hatha Yoga Matinal</h3> 
+                            <p class="card-meta">Avec Coach Sarah • 45 min</p> 
+                        </div> 
+                        <div class="card-footer"> 
+                            <button class="btn-primary">Rejoindre</button> 
+                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                        </div> 
+                    </div> 
+                    <div class="card" onclick="openModal('meditation')"> 
+                        <div> 
+                            <div class="card-tag">14 Oct • 18:00</div> 
+                            <h3 class="card-title">Méditation Profonde</h3> 
+                            <p class="card-meta">Avec Coach Marc • 20 min</p> 
+                        </div> 
+                        <div class="card-footer"> 
+                            <button class="btn-secondary">Détails</button> 
+                            <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                        </div> 
+                    </div> 
+                </div> 
+            </section> 
+
+            <section class="suggested"> 
+                <h2><span>Inspiration</span> Recommandé pour vous</h2> 
+                <div class="grid"> 
+                    <div class="card" onclick="openModal('pilates')"> 
+                        <div> 
+                            <div class="card-tag" style="color: var(--menthe)">Nouveau</div> 
+                            <h3 class="card-title">Pilates Flow</h3> 
+                            <p class="card-meta">Renforcez votre posture et votre souffle.</p> 
+                        </div> 
+                        <div class="card-footer"> 
+                            <button class="btn-secondary">Découvrir</button> 
+                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                        </div> 
+                    </div> 
+                    <div class="card" onclick="openModal('wimhof')"> 
+                        <div> 
+                            <div class="card-tag">Populaire</div> 
+                            <h3 class="card-title">Respiration Wim Hof</h3> 
+                            <p class="card-meta">Maîtrisez votre énergie vitale.</p> 
+                        </div> 
+                        <div class="card-footer"> 
+                            <button class="btn-secondary">Découvrir</button> 
+                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                        </div> 
+                    </div> 
+                </div> 
+            </section> 
+
+            <section class="past"> 
+                <h2><span>Historique</span> Cours terminés</h2> 
+                <div class="grid"> 
+                    <div class="card" onclick="openModal('yin')"> 
+                        <div> 
+                            <div class="card-tag">Terminé</div> 
+                            <h3 class="card-title">Yin Yoga</h3> 
+                            <p class="card-meta">8 Oct 2023 • 60 min</p> 
+                        </div> 
+                        <div class="card-footer"> 
+                            <button class="btn-secondary" style="color: var(--menthe)">Réserver à nouveau</button> 
+                            <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                        </div> 
+                    </div> 
+                </div> 
+            </section> 
+
+            <section> 
+                <h2><span>Innovation</span> Bientôt disponible</h2> 
+                <div class="grid"> 
+                    <div class="card"> 
+                        <div> 
+                            <div class="card-tag badge-soon" style="background: var(--menthe); color: var(--obsidian); font-weight: 600;">Prochainement</div> 
+                            <h3 class="card-title">Live Coaching 1:1</h3> 
+                            <p class="card-meta">Sessions privées avec nos experts.</p> 
+                        </div> 
+                    </div> 
+                    <div class="card"> 
+                        <div> 
+                            <div class="card-tag badge-soon" style="background: var(--menthe); color: var(--obsidian); font-weight: 600;">Prochainement</div> 
+                            <h3 class="card-title">Analyse IA Sommeil</h3> 
+                            <p class="card-meta">Optimisez vos nuits pour mieux vivre.</p> 
+                        </div> 
+                    </div> 
+                </div> 
+            </section> 
+        </div>
+
+        <aside class="immersive-sidebar">
+            <div class="video-container">
+                <video autoplay muted loop playsinline>
+                    <source src="Animate_photos_to_202604122300.mp4" type="video/mp4">
+                </video>
             </div>
-            <p class="coach-note">Prends le temps de souffler aujourd'hui...</p>
+            <div class="video-container">
+                <video autoplay muted loop playsinline>
+                    <source src="Animate_yoga_course_202604122312.mp4" type="video/mp4">
+                </video>
+            </div>
+        </aside>
+    </div>
+
+    <div id="courseModal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modalHeaderImg" class="modal-header-img"></div>
+            <div class="modal-body">
+                <div id="courseContent">
+                    <div class="modal-grid">
+                        <div>
+                            <h2 id="modalTitle" style="font-size: 2.5rem; margin-bottom: 10px;">Titre du Cours</h2>
+                            <p id="modalMeta" style="color: var(--menthe); margin-bottom: 20px; font-weight: 500;">Détails • Niveau</p>
+                            <p id="modalDesc" style="line-height: 1.6; opacity: 0.8; margin-bottom: 30px;">Description détaillée du cours...</p>
+                            
+                            <div style="display: flex; gap: 30px; margin-bottom: 40px;">
+                                <div><span style="display: block; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase;">Durée</span><strong id="modalDur">45 min</strong></div>
+                                <div><span style="display: block; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase;">Bienfaits</span><strong id="modalBen">Sérénité, Force</strong></div>
+                            </div>
+                            
+                            <button class="btn-primary" onclick="startBooking()">Réserver ma séance</button>
+                        </div>
+                        <div id="coachSection" class="coach-profile">
+                            <img src="" id="coachImg" class="coach-img">
+                            <div>
+                                <h4 id="coachName">Coach Name</h4>
+                                <p style="font-size: 0.8rem; opacity: 0.8;">Expert(e) Wellness</p>
+                            </div>
+                            <p style="font-size: 0.75rem;">"Mon approche fusionne mouvement conscient et paix intérieure."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bookingFlow" style="display: none;">
+                    <div id="step1" class="booking-step active">
+                        <h3 style="margin-bottom: 20px;">Finalisez votre réservation</h3>
+                        <div class="form-group">
+                            <label>Nom complet</label>
+                            <input type="text" id="userName" placeholder="Jean Dupont">
+                        </div>
+                        <div class="form-group">
+                            <label>Date & Heure souhaitée</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date">
+                                <select>
+                                    <option>09:30</option>
+                                    <option>12:00</option>
+                                    <option>18:30</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="goToStep(2)">Continuer</button>
+                    </div>
+
+                    <div id="step2" class="booking-step">
+                        <h3 style="margin-bottom: 20px;">Récapitulatif</h3>
+                        <div class="summary-box">
+                            <p><strong id="sumCourse">Cours</strong> avec <span id="sumCoach">Coach</span></p>
+                            <p id="sumUser" style="margin-top:10px; font-size: 0.9rem; opacity: 0.7;"></p>
+                        </div>
+                        <button class="btn-primary" onclick="goToStep(3)">Procéder au paiement</button>
+                    </div>
+
+                    <div id="step3" class="booking-step">
+                        <h3 style="margin-bottom: 20px;">Paiement Sécurisé</h3>
+                        <div class="form-group">
+                            <label>Numéro de carte</label>
+                            <input type="text" placeholder="**** **** **** ****">
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <div class="form-group" style="flex: 2;">
+                                <label>Date d'expiration</label>
+                                <input type="text" placeholder="MM/YY">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>CVC</label>
+                                <input type="text" placeholder="123">
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="goToStep(4)">Payer et confirmer</button>
+                    </div>
+
+                    <div id="step4" class="booking-step" style="text-align: center; padding: 40px 0;">
+                        <div class="success-circle">✓</div>
+                        <h2>Séance confirmée !</h2>
+                        <p style="opacity: 0.7; margin: 15px 0 30px;">Votre voyage vers l'équilibre commence maintenant. Vous allez recevoir un email de confirmation.</p>
+                        <button class="btn-primary" onclick="closeModal()">Terminer</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="close-btn">&times;</div>
-        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800" alt="Yoga postural" class="card-image">
-        <div class="card-content">
-            <span class="card-category">Mouvement</span>
-            <h2 class="card-title">Hatha Flow Zen</h2>
-            <p class="card-description">Une session fluide alliant force et sérénité mentale. La tech au service de votre posture parfaite.</p>
-            <div>
-                <span class="tag">45 min</span>
-                <span class="tag">Intermédiaire</span>
-            </div>
-            <p class="coach-note">Écoute ton corps, il connaît le chemin.</p>
-        </div>
-    </div>
+    <script> 
+        const coursesData = {
+            hatha: {
+                title: "Hatha Yoga Matinal",
+                meta: "Débutant • Énergie",
+                desc: "Réveillez votre corps en douceur avec une série de postures traditionnelles axées sur l'alignement et la respiration profonde. Parfait pour commencer la journée avec clarté.",
+                duration: "45 min",
+                benefits: "Souplesse, Éveil mental",
+                coach: "Sarah",
+                coachBg: "var(--sunlight)",
+                img: "Capture d’écran 2026-04-12 à 22.52.21.jpg"
+            },
+            meditation: {
+                title: "Méditation Profonde",
+                meta: "Tous niveaux • Calme",
+                desc: "Plongez dans un état de relaxation absolue. Cette séance vous guide à travers des techniques de visualisation pour libérer les tensions mentales accumulées.",
+                duration: "20 min",
+                benefits: "Sommeil, Stress-relief",
+                coach: "Marc",
+                coachBg: "var(--menthe)",
+                img: "Capture d’écran 2026-04-12 à 22.52.12.jpg"
+            },
+            pilates: {
+                title: "Pilates Flow",
+                meta: "Intermédiaire • Posture",
+                desc: "Un enchaînement fluide d'exercices visant à renforcer les muscles profonds. Améliorez votre posture et sculptez votre silhouette avec précision.",
+                duration: "50 min",
+                benefits: "Core, Équilibre",
+                coach: "Léa",
+                coachBg: "var(--sunlight)",
+                img: "Capture d’écran 2026-04-12 à 22.52.28.jpg"
+            },
+            wimhof: {
+                title: "Respiration Wim Hof",
+                meta: "Avancé • Vitalité",
+                desc: "Apprenez à maîtriser votre système nerveux par le souffle. Une méthode puissante pour booster votre immunité et votre concentration.",
+                duration: "30 min",
+                benefits: "Focus, Immunité",
+                coach: "Marc",
+                coachBg: "var(--menthe)",
+                img: "Capture d’écran 2026-04-12 à 22.52.12.jpg"
+            },
+            yin: {
+                title: "Yin Yoga",
+                meta: "Doux • Tissus Profonds",
+                desc: "Une pratique lente où les postures sont tenues plusieurs minutes pour cibler les tissus conjonctifs. Un voyage introspectif vers le lâcher-prise.",
+                duration: "60 min",
+                benefits: "Détente, Flexibilité",
+                coach: "Sarah",
+                coachBg: "var(--sunlight)",
+                img: "Capture d’écran 2026-04-12 à 22.52.21.jpg"
+            }
+        };
 
-    <div class="card">
-        <div class="close-btn">&times;</div>
-        <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&q=80&w=800" alt="Votre Coach ZenWell" class="card-image">
-        <div class="card-content">
-            <span class="card-category">Expertise</span>
-            <h2 class="card-title">Marc - Expert Somatique</h2>
-            <p class="card-description">Spécialiste en récupération et biométrie. Il synchronise vos données avec vos sensations physiques.</p>
-            <div>
-                <span class="tag">Yoga</span>
-                <span class="tag">Data Sport</span>
-            </div>
-            <p class="coach-note">La performance commence par le repos.</p>
-        </div>
-    </div>
+        let currentCourse = null;
 
-</div>
+        function openModal(courseId) {
+            const data = coursesData[courseId];
+            currentCourse = data;
+            
+            // Fill content
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalMeta').innerText = data.meta;
+            document.getElementById('modalDesc').innerText = data.desc;
+            document.getElementById('modalDur').innerText = data.duration;
+            document.getElementById('modalBen').innerText = data.benefits;
+            document.getElementById('coachName').innerText = `Coach ${data.coach}`;
+            document.getElementById('modalHeaderImg').style.backgroundImage = `url('${data.img}')`;
+            
+            // Coach style
+            const coachSection = document.getElementById('coachSection');
+            coachSection.style.background = data.coachBg;
+            
+            // Reset views
+            document.getElementById('courseContent').style.display = 'block';
+            document.getElementById('bookingFlow').style.display = 'none';
+            
+            document.getElementById('courseModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-</body>
+        function closeModal() {
+            document.getElementById('courseModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function startBooking() {
+            document.getElementById('courseContent').style.display = 'none';
+            document.getElementById('bookingFlow').style.display = 'block';
+            goToStep(1);
+        }
+
+        function goToStep(stepNum) {
+            document.querySelectorAll('.booking-step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step${stepNum}`).classList.add('active');
+            
+            if(stepNum === 2) {
+                document.getElementById('sumCourse').innerText = currentCourse.title;
+                document.getElementById('sumCoach').innerText = `Coach ${currentCourse.coach}`;
+                document.getElementById('sumUser').innerText = `Pour : ${document.getElementById('userName').value || 'Utilisateur ZenWell'}`;
+            }
+        }
+
+        function toggleFav(btn) { 
+            btn.classList.toggle('active'); 
+            btn.animate([ 
+                { transform: 'scale(1)' }, 
+                { transform: 'scale(1.4)' }, 
+                { transform: 'scale(1)' } 
+            ], { 
+                duration: 300, 
+                easing: 'ease-out' 
+            }); 
+        } 
+    </script> 
+</body> 
 </html>
