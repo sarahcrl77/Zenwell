@@ -34,7 +34,7 @@
             font-family: 'Outfit', sans-serif; 
             min-height: 100vh; 
             padding-top: 100px; 
-            padding-bottom: 100px; 
+            padding-bottom: 0; 
             overflow-x: hidden;
         } 
 
@@ -54,7 +54,8 @@
             z-index: 1000; 
         } 
 
-        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); } 
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); text-decoration: none; } 
+        .nav-logo img { height: 34px; width: auto; display: block; }
         .nav-links { display: flex; gap: 2.5rem; } 
         .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); } 
         .nav-links a:hover, .nav-links a.active { color: var(--text-main); } 
@@ -69,6 +70,7 @@
         .container { flex: 1; max-width: 1100px; } 
          
         section { margin-bottom: 5rem; animation: fadeIn 0.8s ease-out both; } 
+        .container section:last-of-type { margin-bottom: 0; }
         section:nth-child(2) { animation-delay: 0.2s; } 
         section:nth-child(3) { animation-delay: 0.4s; } 
 
@@ -126,6 +128,12 @@
             transform: translateY(-8px); 
             box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.02);
         } 
+
+        .card.course-highlight {
+            border-color: var(--sunlight);
+            box-shadow: 0 0 0 3px rgba(254, 250, 143, 0.28), 0 20px 40px rgba(0,0,0,0.3);
+            animation: pulseHighlight 1.2s ease-in-out 2;
+        }
 
         .card-tag { 
             font-size: 0.7rem; 
@@ -279,24 +287,114 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } 
 
+        @keyframes pulseHighlight {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
         @media (max-width: 1100px) {
             .immersive-sidebar { display: none; }
         }
+
+        .site-footer {
+            margin-top: 4rem;
+            background: linear-gradient(180deg, rgba(37, 37, 37, 0.95) 0%, rgba(31, 31, 31, 0.98) 100%);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-top {
+            background: rgba(231, 253, 230, 0.05);
+            text-align: center;
+            padding: 0.9rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-top a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-top a:hover {
+            color: var(--sunlight);
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col h3 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.9rem;
+            color: var(--menthe);
+        }
+
+        .footer-col a,
+        .footer-col p {
+            display: block;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        .footer-col a:hover {
+            color: var(--sunlight);
+        }
+
+        .footer-contact {
+            margin-top: 0.6rem;
+        }
+
+        .footer-contact .label {
+            color: var(--text-dim);
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.2rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.2rem 5% 1.8rem;
+            color: var(--text-dim);
+            font-size: 0.84rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         @media (max-width: 768px) { 
             .nav-links { display: none; } 
             h2 { font-size: 1.2rem; } 
             .modal-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
         } 
     </style> 
 </head> 
 <body> 
+    <div id="top"></div>
 
     <nav> 
-        <div class="nav-logo">ZenWell</div> 
+        <a href="index.html" class="nav-logo"><img src="logonavbar.png" alt="ZenWell"></a> 
         <div class="nav-links"> 
             <a href="Dashboard.html">Dashboard</a> 
             <a href="Mescours.html" class="active">Mes cours</a> 
             <a href="Mesobjectifs.html">Mes objectifs</a> 
+            <a href="Profil.html">Profil</a> 
         </div> 
     </nav> 
 
@@ -306,26 +404,26 @@
             <section class="upcoming"> 
                 <h2><span>Prochainement</span> Mes rendez-vous</h2> 
                 <div class="grid"> 
-                    <div class="card" onclick="openModal('hatha')"> 
+                    <div class="card" data-course-id="hatha" onclick="openSessionInfo('hatha')"> 
                         <div> 
                             <div class="card-tag">Demain • 09:30</div> 
                             <h3 class="card-title">Hatha Yoga Matinal</h3> 
                             <p class="card-meta">Avec Coach Sarah • 45 min</p> 
                         </div> 
                         <div class="card-footer"> 
-                            <button class="btn-primary">Rejoindre</button> 
-                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                            <button class="btn-primary course-action-btn">Rejoindre</button> 
+                            <button class="fav-toggle" data-course-id="hatha" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
                         </div> 
                     </div> 
-                    <div class="card" onclick="openModal('meditation')"> 
+                    <div class="card" data-course-id="meditation" onclick="openSessionInfo('meditation')"> 
                         <div> 
                             <div class="card-tag">14 Oct • 18:00</div> 
                             <h3 class="card-title">Méditation Profonde</h3> 
                             <p class="card-meta">Avec Coach Marc • 20 min</p> 
                         </div> 
                         <div class="card-footer"> 
-                            <button class="btn-secondary">Détails</button> 
-                            <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                            <button class="btn-secondary course-action-btn">Détails</button> 
+                            <button class="fav-toggle active" data-course-id="meditation" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
                         </div> 
                     </div> 
                 </div> 
@@ -334,26 +432,26 @@
             <section class="suggested"> 
                 <h2><span>Inspiration</span> Recommandé pour vous</h2> 
                 <div class="grid"> 
-                    <div class="card" onclick="openModal('pilates')"> 
+                    <div class="card" data-course-id="pilates" onclick="openModal('pilates')"> 
                         <div> 
                             <div class="card-tag" style="color: var(--menthe)">Nouveau</div> 
                             <h3 class="card-title">Pilates Flow</h3> 
                             <p class="card-meta">Renforcez votre posture et votre souffle.</p> 
                         </div> 
                         <div class="card-footer"> 
-                            <button class="btn-secondary">Découvrir</button> 
-                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                            <button class="btn-secondary course-action-btn">Découvrir</button> 
+                            <button class="fav-toggle" data-course-id="pilates" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
                         </div> 
                     </div> 
-                    <div class="card" onclick="openModal('wimhof')"> 
+                    <div class="card" data-course-id="wimhof" onclick="openModal('wimhof')"> 
                         <div> 
                             <div class="card-tag">Populaire</div> 
                             <h3 class="card-title">Respiration Wim Hof</h3> 
                             <p class="card-meta">Maîtrisez votre énergie vitale.</p> 
                         </div> 
                         <div class="card-footer"> 
-                            <button class="btn-secondary">Découvrir</button> 
-                            <button class="fav-toggle" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                            <button class="btn-secondary course-action-btn">Découvrir</button> 
+                            <button class="fav-toggle" data-course-id="wimhof" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
                         </div> 
                     </div> 
                 </div> 
@@ -362,15 +460,15 @@
             <section class="past"> 
                 <h2><span>Historique</span> Cours terminés</h2> 
                 <div class="grid"> 
-                    <div class="card" onclick="openModal('yin')"> 
+                    <div class="card" data-course-id="yin" onclick="openModal('yin')"> 
                         <div> 
                             <div class="card-tag">Terminé</div> 
                             <h3 class="card-title">Yin Yoga</h3> 
                             <p class="card-meta">8 Oct 2023 • 60 min</p> 
                         </div> 
                         <div class="card-footer"> 
-                            <button class="btn-secondary" style="color: var(--menthe)">Réserver à nouveau</button> 
-                            <button class="fav-toggle active" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
+                            <button class="btn-secondary course-action-btn" style="color: var(--menthe)">Réserver à nouveau</button> 
+                            <button class="fav-toggle active" data-course-id="yin" onclick="event.stopPropagation(); toggleFav(this)">★</button> 
                         </div> 
                     </div> 
                 </div> 
@@ -411,6 +509,58 @@
         </aside>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-top"><a href="#top">Retour en haut</a></div>
+
+        <div class="footer-main">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>À propos de ZenWell</h3>
+                    <a href="Dashboard.html">Dashboard</a>
+                    <a href="Mesobjectifs.html">Mes objectifs</a>
+                    <a href="Mescours.html">Mes cours</a>
+                    <a href="Profil.html">Profil</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Objectifs</h3>
+                    <a href="Mesobjectifs.html">Suivi du jour</a>
+                    <a href="Mesobjectifs.html">Objectifs enregistrés</a>
+                    <a href="Dashboard.html">Emploi du temps</a>
+                    <a href="Profil.html">Mon profil</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Cours & séances</h3>
+                    <a href="Mescours.html">Mes rendez-vous</a>
+                    <a href="Mescours.html">Cours favoris</a>
+                    <a href="Mescours.html">Programmes recommandés</a>
+                    <a href="Dashboard.html">Statistiques</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Nous contacter</h3>
+                    <p>Besoin d’aide ou d’un renseignement ?</p>
+                    <div class="footer-contact">
+                        <div>
+                            <span class="label">Téléphone</span>
+                            <p></p>
+                        </div>
+                        <div style="margin-top: 0.9rem;">
+                            <span class="label">Adresse mail</span>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 ZenWell. Tous droits réservés.</span>
+            <span>Votre espace bien-être, suivi et objectifs réunis.</span>
+        </div>
+    </footer>
+
     <div id="courseModal" class="modal-overlay" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div id="modalHeaderImg" class="modal-header-img"></div>
@@ -427,7 +577,7 @@
                                 <div><span style="display: block; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase;">Bienfaits</span><strong id="modalBen">Sérénité, Force</strong></div>
                             </div>
                             
-                            <button class="btn-primary" onclick="startBooking()">Réserver ma séance</button>
+                            <button class="btn-primary" id="reserveBtn" onclick="startBooking()">Réserver ma séance</button>
                         </div>
                         <div id="coachSection" class="coach-profile">
                             <img src="" id="coachImg" class="coach-img">
@@ -496,11 +646,38 @@
                         <button class="btn-primary" onclick="closeModal()">Terminer</button>
                     </div>
                 </div>
+
+                <div id="sessionInfoFlow" style="display: none;">
+                    <h3 style="margin-bottom: 20px;">Infos de ma séance</h3>
+                    <div class="summary-box">
+                        <p><strong id="sessionInfoCourse">Cours</strong></p>
+                        <p style="margin-top: 10px;">Date : <span id="sessionInfoDate">-</span></p>
+                        <p>Heure : <span id="sessionInfoTime">-</span></p>
+                    </div>
+
+                    <div id="sessionEditBlock" style="display: none; margin-top: 20px;">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="sessionEditDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Heure</label>
+                            <input type="time" id="sessionEditTime">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn-secondary" id="sessionEditBtn" onclick="enableSessionEdit()">Modifier</button>
+                        <button class="btn-primary" id="sessionSaveBtn" style="display: none;" onclick="saveSessionEdit()">Enregistrer</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script> 
+        const FAVORITES_STORAGE_KEY = 'zenwell-favorite-courses';
+
         const coursesData = {
             hatha: {
                 title: "Hatha Yoga Matinal",
@@ -560,6 +737,139 @@
         };
 
         let currentCourse = null;
+        let currentSessionCourseId = null;
+
+        function loadFavoriteCourses() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || 'null');
+                if (Array.isArray(stored)) {
+                    return stored;
+                }
+            } catch (error) {
+                console.warn('Impossible de lire les favoris enregistrés.', error);
+            }
+
+            return Array.from(document.querySelectorAll('.fav-toggle.active'))
+                .map(button => button.dataset.courseId)
+                .filter(Boolean);
+        }
+
+        function saveFavoriteCourses(courseIds) {
+            localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(courseIds));
+        }
+
+        function syncFavoriteButtons() {
+            const favoriteCourses = new Set(loadFavoriteCourses());
+
+            document.querySelectorAll('.fav-toggle[data-course-id]').forEach(button => {
+                button.classList.toggle('active', favoriteCourses.has(button.dataset.courseId));
+            });
+
+            saveFavoriteCourses(Array.from(favoriteCourses));
+        }
+
+        function parseSessionDateFromCard(card) {
+            const tagText = card.querySelector('.card-tag')?.textContent?.trim().toLowerCase() || '';
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            if (tagText.startsWith("aujourd'hui") || tagText.startsWith('aujourdhui')) {
+                return today;
+            }
+
+            if (tagText.startsWith('demain')) {
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return tomorrow;
+            }
+
+            const monthMap = {
+                jan: 0,
+                fev: 1,
+                fév: 1,
+                mar: 2,
+                avr: 3,
+                mai: 4,
+                jun: 5,
+                jui: 6,
+                aou: 7,
+                août: 7,
+                sep: 8,
+                oct: 9,
+                nov: 10,
+                dec: 11,
+                déc: 11
+            };
+
+            const dateMatch = tagText.match(/(\d{1,2})\s*([a-zéû]+)/i);
+            if (!dateMatch) {
+                return null;
+            }
+
+            const day = Number(dateMatch[1]);
+            const monthToken = dateMatch[2].slice(0, 3);
+            const month = monthMap[monthToken];
+
+            if (Number.isNaN(day) || month === undefined) {
+                return null;
+            }
+
+            return new Date(today.getFullYear(), month, day);
+        }
+
+        function isSessionToday(card) {
+            const sessionDate = parseSessionDateFromCard(card);
+            if (!sessionDate) {
+                return false;
+            }
+
+            const now = new Date();
+            return (
+                sessionDate.getFullYear() === now.getFullYear() &&
+                sessionDate.getMonth() === now.getMonth() &&
+                sessionDate.getDate() === now.getDate()
+            );
+        }
+
+        function updateCourseActionButtons() {
+            document.querySelectorAll('.card[data-course-id]').forEach(card => {
+                const courseId = card.dataset.courseId;
+                const actionButton = card.querySelector('.course-action-btn');
+                const favButton = card.querySelector('.fav-toggle[data-course-id]');
+
+                if (!courseId || !actionButton || !favButton) {
+                    return;
+                }
+
+                if (card.closest('.upcoming')) {
+                    actionButton.textContent = 'Voir ma séance';
+                    actionButton.classList.remove('btn-primary');
+                    actionButton.classList.add('btn-secondary');
+                    actionButton.onclick = (event) => {
+                        event.stopPropagation();
+                        openSessionInfo(courseId);
+                    };
+                    return;
+                }
+
+                actionButton.onclick = null;
+
+                const isFavorite = favButton.classList.contains('active');
+                const label = !isFavorite
+                    ? 'Découvrir'
+                    : (isSessionToday(card) ? 'Rejoindre' : 'Détails');
+
+                actionButton.textContent = label;
+
+                if (label === 'Rejoindre') {
+                    actionButton.classList.remove('btn-secondary');
+                    actionButton.classList.add('btn-primary');
+                } else {
+                    actionButton.classList.remove('btn-primary');
+                    actionButton.classList.add('btn-secondary');
+                }
+            });
+        }
 
         function openModal(courseId) {
             const data = coursesData[courseId];
@@ -580,9 +890,15 @@
             
             const coachSection = document.getElementById('coachSection');
             coachSection.style.background = data.coachBg;
+
+            const reserveBtn = document.getElementById('reserveBtn');
+            if (reserveBtn) {
+                reserveBtn.style.display = 'inline-block';
+            }
             
             document.getElementById('courseContent').style.display = 'block';
             document.getElementById('bookingFlow').style.display = 'none';
+            document.getElementById('sessionInfoFlow').style.display = 'none';
             
             document.getElementById('courseModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -591,6 +907,169 @@
         function closeModal() {
             document.getElementById('courseModal').classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        function getSessionInfoFromCard(courseId) {
+            const card = document.querySelector(`.upcoming .card[data-course-id="${courseId}"]`);
+            const tagText = card?.querySelector('.card-tag')?.textContent?.trim() || '';
+            const [datePart, timePart] = tagText.split('•').map(part => (part || '').trim());
+
+            const timeIso = /^\d{1,2}:\d{2}$/.test(timePart || '')
+                ? String(timePart).padStart(5, '0')
+                : '';
+
+            return {
+                date: datePart || 'Date non définie',
+                time: timePart || 'Heure non définie',
+                dateIso: parseDateLabelToIso(datePart || ''),
+                timeIso
+            };
+        }
+
+        function parseDateLabelToIso(label) {
+            const normalized = String(label || '').trim().toLowerCase();
+            if (!normalized) {
+                return '';
+            }
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            if (normalized.startsWith("aujourd'hui") || normalized.startsWith('aujourdhui')) {
+                return today.toISOString().slice(0, 10);
+            }
+
+            if (normalized.startsWith('demain')) {
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return tomorrow.toISOString().slice(0, 10);
+            }
+
+            const monthMap = {
+                jan: 0,
+                fev: 1,
+                fév: 1,
+                mar: 2,
+                avr: 3,
+                mai: 4,
+                jun: 5,
+                jui: 6,
+                aou: 7,
+                août: 7,
+                sep: 8,
+                oct: 9,
+                nov: 10,
+                dec: 11,
+                déc: 11
+            };
+
+            const dateMatch = normalized.match(/(\d{1,2})\s*([a-zéû]+)/i);
+            if (!dateMatch) {
+                return '';
+            }
+
+            const day = Number(dateMatch[1]);
+            const monthToken = dateMatch[2].slice(0, 3);
+            const month = monthMap[monthToken];
+
+            if (Number.isNaN(day) || month === undefined) {
+                return '';
+            }
+
+            const date = new Date(today.getFullYear(), month, day);
+            return date.toISOString().slice(0, 10);
+        }
+
+        function formatIsoDateToLabel(isoDate) {
+            if (!isoDate) {
+                return 'Date non définie';
+            }
+
+            const parsed = new Date(`${isoDate}T00:00:00`);
+            if (Number.isNaN(parsed.getTime())) {
+                return 'Date non définie';
+            }
+
+            const monthLabels = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${parsed.getDate()} ${monthLabels[parsed.getMonth()]}`;
+        }
+
+        function openSessionInfo(courseId) {
+            const data = coursesData[courseId];
+            const sessionInfo = getSessionInfoFromCard(courseId);
+
+            if (!data) {
+                return;
+            }
+
+            currentSessionCourseId = courseId;
+
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalMeta').innerText = data.meta;
+            document.getElementById('modalDesc').innerText = data.desc;
+            document.getElementById('modalDur').innerText = data.duration;
+            document.getElementById('modalBen').innerText = data.benefits;
+            document.getElementById('coachName').innerText = `Coach ${data.coach}`;
+            document.getElementById('modalHeaderImg').style.backgroundImage = `url('${data.img}')`;
+            document.getElementById('coachImg').src = data.coachImg;
+            document.getElementById('coachSection').style.background = data.coachBg;
+
+            document.getElementById('sessionInfoCourse').innerText = data.title;
+            document.getElementById('sessionInfoDate').innerText = sessionInfo.date;
+            document.getElementById('sessionInfoTime').innerText = sessionInfo.time;
+            document.getElementById('sessionEditDate').value = sessionInfo.dateIso;
+            document.getElementById('sessionEditTime').value = sessionInfo.timeIso;
+
+            document.getElementById('sessionEditBlock').style.display = 'none';
+            document.getElementById('sessionSaveBtn').style.display = 'none';
+            document.getElementById('sessionEditBtn').style.display = 'inline-block';
+
+            document.getElementById('courseContent').style.display = 'none';
+            document.getElementById('bookingFlow').style.display = 'none';
+            document.getElementById('sessionInfoFlow').style.display = 'block';
+
+            document.getElementById('courseModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function enableSessionEdit() {
+            document.getElementById('sessionEditBlock').style.display = 'block';
+            document.getElementById('sessionSaveBtn').style.display = 'inline-block';
+            document.getElementById('sessionEditBtn').style.display = 'none';
+        }
+
+        function saveSessionEdit() {
+            if (!currentSessionCourseId) {
+                return;
+            }
+
+            const nextDateIso = document.getElementById('sessionEditDate').value;
+            const nextTimeIso = document.getElementById('sessionEditTime').value;
+
+            if (!nextDateIso || !nextTimeIso) {
+                alert('Choisissez une date et une heure valides.');
+                return;
+            }
+
+            const nextDate = formatIsoDateToLabel(nextDateIso);
+            const nextTime = nextTimeIso;
+
+            const card = document.querySelector(`.upcoming .card[data-course-id="${currentSessionCourseId}"]`);
+            if (card) {
+                const tag = card.querySelector('.card-tag');
+                if (tag) {
+                    tag.textContent = `${nextDate} • ${nextTime}`;
+                }
+            }
+
+            document.getElementById('sessionInfoDate').innerText = nextDate;
+            document.getElementById('sessionInfoTime').innerText = nextTime;
+
+            document.getElementById('sessionEditBlock').style.display = 'none';
+            document.getElementById('sessionSaveBtn').style.display = 'none';
+            document.getElementById('sessionEditBtn').style.display = 'inline-block';
+
+            updateCourseActionButtons();
         }
 
         function startBooking() {
@@ -611,7 +1090,20 @@
         }
 
         function toggleFav(btn) { 
-            btn.classList.toggle('active'); 
+            const courseId = btn.dataset.courseId;
+            const favoriteCourses = new Set(loadFavoriteCourses());
+
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                favoriteCourses.delete(courseId);
+            } else {
+                btn.classList.add('active');
+                favoriteCourses.add(courseId);
+            }
+
+            saveFavoriteCourses(Array.from(favoriteCourses));
+            updateCourseActionButtons();
+
             btn.animate([ 
                 { transform: 'scale(1)' }, 
                 { transform: 'scale(1.4)' }, 
@@ -621,6 +1113,23 @@
                 easing: 'ease-out' 
             }); 
         } 
+
+        syncFavoriteButtons();
+    updateCourseActionButtons();
+
+        const requestedCourseId = new URLSearchParams(window.location.search).get('course');
+
+        if (requestedCourseId && coursesData[requestedCourseId]) {
+            const targetCard = document.querySelector(`.card[data-course-id="${requestedCourseId}"]`);
+
+            if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetCard.classList.add('course-highlight');
+                setTimeout(() => targetCard.classList.remove('course-highlight'), 2600);
+            }
+
+            window.history.replaceState({}, '', 'Mescours.html');
+        }
     </script> 
 </body> 
 </html>

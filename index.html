@@ -48,48 +48,50 @@
         .blob {
             position: absolute;
             border-radius: 50%;
-            /* Animation beaucoup plus ample */
-            animation: moveAround 10s infinite alternate ease-in-out;
+            /* Pulsation légère sans déplacement */
+            animation: heartbeat 6s infinite ease-in-out;
             mix-blend-mode: screen;
         }
 
-        /* 4 Ronds bien distincts qui bougent partout */
+        /* 4 ronds qui pulsent légèrement */
         .blob-1 {
             width: 400px; height: 400px;
             background: var(--sunlight);
             top: 0%; left: 0%;
-            animation-duration: 8s;
+            animation-duration: 7s;
         }
 
         .blob-2 {
             width: 450px; height: 450px;
             background: var(--menthe);
             bottom: 0%; right: 0%;
-            animation-duration: 12s;
-            animation-delay: -2s;
+            animation-duration: 8s;
+            animation-delay: -1s;
         }
 
         .blob-3 {
             width: 300px; height: 300px;
             background: var(--sunlight);
             bottom: 0%; left: 0%;
-            animation-duration: 15s;
-            animation-delay: -4s;
+            animation-duration: 9s;
+            animation-delay: -2s;
         }
 
         .blob-4 {
             width: 350px; height: 350px;
             background: var(--menthe);
             top: 0%; right: 0%;
-            animation-duration: 9s;
-            animation-delay: -6s;
+            animation-duration: 7.5s;
+            animation-delay: -3s;
         }
 
-        /* Mouvement de grande amplitude */
-        @keyframes moveAround {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(40vw, 30vh) scale(1.3); }
-            100% { transform: translate(-10vw, 50vh) scale(0.9); }
+        /* Pulsation douce façon battement de coeur */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); opacity: 0.78; }
+            18% { transform: scale(1.03); opacity: 0.9; }
+            35% { transform: scale(1); opacity: 0.82; }
+            52% { transform: scale(1.045); opacity: 0.95; }
+            70% { transform: scale(1); opacity: 0.8; }
         }
 
         /* --- Main Content --- */
@@ -100,6 +102,7 @@
             flex-direction: column;
             align-items: center;
             gap: 4rem;
+            transform: translateY(-100px);
         }
 
         /* Logo ÉNORME avec animation de "respiration" et éclat */
@@ -126,6 +129,7 @@
             background: transparent;
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.4);
+            margin-top: -130px;
             padding: 22px 50px;
             font-size: 1.3rem;
             font-weight: 500;

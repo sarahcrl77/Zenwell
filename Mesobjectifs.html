@@ -40,7 +40,8 @@
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
             z-index: 1000;
         }
-        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); }
+        .nav-logo { font-weight: 600; font-size: 1.4rem; color: var(--menthe); text-decoration: none; }
+        .nav-logo img { height: 34px; width: auto; display: block; }
         .nav-links { display: flex; gap: 2.5rem; }
         .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 0.95rem; transition: var(--transition); }
         .nav-links a:hover { color: var(--sunlight); } /* Ajout d'une petite vie au survol */
@@ -117,16 +118,207 @@
 
         .insight-card { background: linear-gradient(135deg, rgba(231, 253, 230, 0.05) 0%, rgba(255,255,255,0) 100%); border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.5rem; margin-top: 2rem; }
         .insight-card p { color: var(--menthe); font-size: 0.95rem; }
+
+        .site-footer {
+            margin-top: 4rem;
+            background: linear-gradient(180deg, rgba(37, 37, 37, 0.95) 0%, rgba(31, 31, 31, 0.98) 100%);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-top {
+            background: rgba(231, 253, 230, 0.05);
+            text-align: center;
+            padding: 0.9rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-top a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-top a:hover {
+            color: var(--sunlight);
+        }
+
+        .footer-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col h3 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.9rem;
+            color: var(--menthe);
+        }
+
+        .footer-col a,
+        .footer-col p {
+            display: block;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        .footer-col a:hover {
+            color: var(--sunlight);
+        }
+
+        .footer-contact {
+            margin-top: 0.6rem;
+        }
+
+        .footer-contact .label {
+            color: var(--text-dim);
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.2rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.2rem 5% 1.8rem;
+            color: var(--text-dim);
+            font-size: 0.84rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .objectives-summary {
+            background: rgba(231, 253, 230, 0.06);
+            border: 1px solid rgba(231, 253, 230, 0.2);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .objectives-summary h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: var(--menthe);
+        }
+
+        .objectives-summary p {
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-edit-goals {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px solid var(--glass-border);
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .btn-reset-day {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px dashed var(--glass-border);
+            margin-top: 0.8rem;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+
+        .btn-reset-day:hover {
+            color: var(--sunlight);
+            border-color: var(--sunlight);
+        }
+
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            min-width: 280px;
+            max-width: 360px;
+            padding: 0.95rem 1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(231, 253, 230, 0.28);
+            background: rgba(20, 30, 20, 0.92);
+            color: var(--menthe);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .toast-text {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .btn-edit-goals:hover {
+            color: var(--sunlight);
+            border-color: var(--sunlight);
+        }
+
+        .daily-heading {
+            margin-bottom: 1.2rem;
+            color: var(--menthe);
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .return-message {
+            margin-top: 0.8rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
+    <div id="top"></div>
 
     <nav>
-        <div class="nav-logo">ZenWell</div>
+        <a href="index.html" class="nav-logo"><img src="logonavbar.png" alt="ZenWell"></a>
         <div class="nav-links">
             <a href="Dashboard.html">Dashboard</a>
             <a href="Mescours.html">Mes cours</a>
             <a href="Mesobjectifs.html" class="active">Mes objectifs</a>
+            <a href="Profil.html">Profil</a>
         </div>
     </nav>
 
@@ -173,48 +365,51 @@
                 <p class="subtitle">Enregistrez vos efforts du jour.</p>
 
                 <div class="goal-form">
+                    <div class="daily-heading" id="dailyHeading">Pour le -</div>
+                    <div class="objectives-summary" id="objectivesSummary">
+                        <h3>Mes objectifs enregistrés</h3>
+                        <p id="summaryWeight">Poids cible : -</p>
+                        <p id="summarySessions">Séances / semaine : -</p>
+                        <p id="summarySleep">Sommeil idéal : -</p>
+                        <p class="return-message" id="returnMessage">Revenez demain pour votre prochain suivi.</p>
+                    </div>
+
+                    <div id="dailyQuestionnaire">
+
                     <label>Repos & Sommeil</label>
                     <p style="margin-bottom: 10px; font-size: 0.9rem;">Combien d'heures avez-vous dormi ?</p>
-                    <input type="number" placeholder="Ex: 7.5">
+                    <input type="number" id="dailySleepHours" placeholder="Ex: 7.5">
 
                     <label>Humeur & Stress</label>
-                    <div class="options-grid">
-                        <div class="option-item" onclick="toggleSelect(this)">Serein</div>
-                        <div class="option-item" onclick="toggleSelect(this)">Moyen</div>
-                        <div class="option-item" onclick="toggleSelect(this)">Stressé</div>
+                    <div class="options-grid" data-question="mood">
+                        <div class="option-item" data-value="Serein" onclick="toggleSelect(this)">Serein</div>
+                        <div class="option-item" data-value="Moyen" onclick="toggleSelect(this)">Moyen</div>
+                        <div class="option-item" data-value="Stressé" onclick="toggleSelect(this)">Stressé</div>
                     </div>
 
                     <label>Séance de sport</label>
                     <p style="margin-bottom: 10px; font-size: 0.9rem;">Avez-vous fait une séance aujourd'hui ?</p>
-                    <div class="options-grid">
-                        <div class="option-item" onclick="showSport(true, this)">Oui</div>
-                        <div class="option-item" onclick="showSport(false, this)">Non</div>
+                    <div class="options-grid" data-question="sportDone">
+                        <div class="option-item" data-value="Oui" onclick="showSport(true, this)">Oui</div>
+                        <div class="option-item" data-value="Non" onclick="showSport(false, this)">Non</div>
                     </div>
 
                     <div id="details-sport" style="display: none;">
                         <label>Détails du sport</label>
-                        <textarea placeholder="Ex: Musculation, 1h de cardio..." rows="2"></textarea>
+                        <textarea id="dailySportDetails" placeholder="Ex: Musculation, 1h de cardio..." rows="2"></textarea>
                         
                         <label>Courbatures</label>
-                        <div class="options-grid">
-                            <div class="option-item" onclick="toggleSelect(this)">Aucune</div>
-                            <div class="option-item" onclick="toggleSelect(this)">Légères</div>
-                            <div class="option-item" onclick="toggleSelect(this)">Fortes</div>
+                        <div class="options-grid" data-question="soreness">
+                            <div class="option-item" data-value="Aucune" onclick="toggleSelect(this)">Aucune</div>
+                            <div class="option-item" data-value="Légères" onclick="toggleSelect(this)">Légères</div>
+                            <div class="option-item" data-value="Fortes" onclick="toggleSelect(this)">Fortes</div>
                         </div>
                     </div>
 
-                    <label>Tracking de la semaine (Séances)</label>
-                    <div class="week-dots" id="weekTracker">
-                        <div class="dot" onclick="this.classList.toggle('active')">L</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">M</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">J</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">V</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">S</div>
-                        <div class="dot" onclick="this.classList.toggle('active')">D</div>
+                    <button class="btn btn-save" style="margin-top: 2rem;" onclick="saveDailyCheckin()">Valider ma journée</button>
                     </div>
-
-                    <button class="btn btn-save" style="margin-top: 2rem;" onclick="alert('Données sauvegardées !')">Valider ma journée</button>
+                    <button class="btn btn-reset-day" id="resetDayBtn" onclick="resetTodayCheckin()">Réinitialiser le jour</button>
+                    <button class="btn btn-edit-goals" onclick="editGoals()">Modifier mes objectifs</button>
                 </div>
             </div>
         </main>
@@ -237,7 +432,249 @@
         </aside>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-top"><a href="#top">Retour en haut</a></div>
+
+        <div class="footer-main">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>À propos de ZenWell</h3>
+                    <a href="Dashboard.html">Dashboard</a>
+                    <a href="Mesobjectifs.html">Mes objectifs</a>
+                    <a href="Mescours.html">Mes cours</a>
+                    <a href="Profil.html">Profil</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Objectifs</h3>
+                    <a href="Mesobjectifs.html">Suivi du jour</a>
+                    <a href="Mesobjectifs.html">Objectifs enregistrés</a>
+                    <a href="Dashboard.html">Emploi du temps</a>
+                    <a href="Profil.html">Mon profil</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Cours & séances</h3>
+                    <a href="Mescours.html">Mes rendez-vous</a>
+                    <a href="Mescours.html">Cours favoris</a>
+                    <a href="Mescours.html">Programmes recommandés</a>
+                    <a href="Dashboard.html">Statistiques</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Nous contacter</h3>
+                    <p>Besoin d’aide ou d’un renseignement ?</p>
+                    <div class="footer-contact">
+                        <div>
+                            <span class="label">Téléphone</span>
+                            <p></p>
+                        </div>
+                        <div style="margin-top: 0.9rem;">
+                            <span class="label">Adresse mail</span>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 ZenWell. Tous droits réservés.</span>
+            <span>Votre espace bien-être, suivi et objectifs réunis.</span>
+        </div>
+    </footer>
+
+    <div id="saveToast" class="toast" aria-live="polite" aria-atomic="true">
+        <div class="toast-title">Suivi enregistré</div>
+        <div class="toast-text">Vos réponses du jour ont bien été sauvegardées.</div>
+    </div>
+
     <script>
+        const GOALS_STORAGE_KEY = 'zenwell-user-goals';
+        const DAILY_CHECKINS_KEY = 'zenwell-daily-checkins';
+        let toastTimer = null;
+
+        function showToast(message) {
+            const toast = document.getElementById('saveToast');
+            if (!toast) {
+                return;
+            }
+
+            const toastText = toast.querySelector('.toast-text');
+            if (toastText && message) {
+                toastText.innerText = message;
+            }
+
+            toast.classList.add('show');
+
+            if (toastTimer) {
+                clearTimeout(toastTimer);
+            }
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2400);
+        }
+
+        function formatDateFr(date) {
+            return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' }).format(date);
+        }
+
+        function toIsoDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getTomorrowLabel() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return formatDateFr(tomorrow);
+        }
+
+        function loadDailyCheckins() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(DAILY_CHECKINS_KEY) || '{}');
+                if (stored && typeof stored === 'object') {
+                    return stored;
+                }
+            } catch (error) {
+                console.warn('Impossible de lire les suivis journaliers.', error);
+            }
+
+            return {};
+        }
+
+        function saveDailyCheckins(checkins) {
+            localStorage.setItem(DAILY_CHECKINS_KEY, JSON.stringify(checkins));
+        }
+
+        function getSelectedValue(questionName) {
+            const selected = document.querySelector(`.options-grid[data-question="${questionName}"] .option-item.selected`);
+            return selected?.dataset.value || '';
+        }
+
+        function setSelectedValue(questionName, value) {
+            const options = document.querySelectorAll(`.options-grid[data-question="${questionName}"] .option-item`);
+            options.forEach(option => {
+                option.classList.toggle('selected', option.dataset.value === value);
+            });
+        }
+
+        function updateDailyHeaderAndMessage(isCompletedToday) {
+            const today = new Date();
+            document.getElementById('dailyHeading').innerText = `Pour le ${formatDateFr(today)}`;
+
+            const tomorrowLabel = getTomorrowLabel();
+            document.getElementById('returnMessage').innerText = isCompletedToday
+                ? `Revenez demain (${tomorrowLabel}) pour votre prochain suivi.`
+                : `Suivi du jour en attente. Ensuite, revenez demain (${tomorrowLabel}).`;
+        }
+
+        function setDailyQuestionnaireVisibility(isVisible) {
+            const questionnaire = document.getElementById('dailyQuestionnaire');
+            const resetButton = document.getElementById('resetDayBtn');
+            if (!questionnaire) {
+                return;
+            }
+
+            questionnaire.style.display = isVisible ? 'block' : 'none';
+
+            if (resetButton) {
+                resetButton.style.display = isVisible ? 'none' : 'block';
+            }
+        }
+
+        function restoreDailyFormForToday() {
+            const todayIso = toIsoDate(new Date());
+            const checkins = loadDailyCheckins();
+            const todayData = checkins[todayIso];
+
+            if (!todayData) {
+                setDailyQuestionnaireVisibility(true);
+                updateDailyHeaderAndMessage(false);
+                return;
+            }
+
+            document.getElementById('dailySleepHours').value = todayData.sleepHours || '';
+            setSelectedValue('mood', todayData.mood || '');
+            setSelectedValue('sportDone', todayData.sportDone || '');
+            document.getElementById('dailySportDetails').value = todayData.sportDetails || '';
+            setSelectedValue('soreness', todayData.soreness || '');
+            document.getElementById('details-sport').style.display = todayData.sportDone === 'Oui' ? 'block' : 'none';
+
+            setDailyQuestionnaireVisibility(false);
+
+            updateDailyHeaderAndMessage(true);
+        }
+
+        function clearDailyForm() {
+            document.getElementById('dailySleepHours').value = '';
+            document.getElementById('dailySportDetails').value = '';
+            document.getElementById('details-sport').style.display = 'none';
+
+            ['mood', 'sportDone', 'soreness'].forEach(questionName => {
+                const options = document.querySelectorAll(`.options-grid[data-question="${questionName}"] .option-item`);
+                options.forEach(option => option.classList.remove('selected'));
+            });
+        }
+
+        function saveGoals(goals) {
+            localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals));
+        }
+
+        function loadGoals() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(GOALS_STORAGE_KEY) || 'null');
+                if (stored && typeof stored === 'object') {
+                    return stored;
+                }
+            } catch (error) {
+                console.warn('Impossible de lire les objectifs enregistrés.', error);
+            }
+
+            return null;
+        }
+
+        function updateGoalsSummary(goals) {
+            document.getElementById('summaryWeight').innerText = `Poids cible : ${goals.targetWeight} kg`;
+            document.getElementById('summarySessions').innerText = `Séances / semaine : ${goals.sessionsGoal}`;
+            document.getElementById('summarySleep').innerText = `Sommeil idéal : ${goals.sleepGoal} h`;
+        }
+
+        function switchToTrackingView() {
+            document.getElementById('section-objectifs').style.display = 'none';
+            document.getElementById('section-suivi').style.display = 'block';
+            document.getElementById('panel-title').innerText = 'Suivi Actif';
+            document.getElementById('panel-desc').innerText = 'Semaine en cours';
+            document.getElementById('circleProgress').style.strokeDashoffset = 0;
+            document.getElementById('percText').innerText = '100%';
+        }
+
+        function editGoals() {
+            document.getElementById('section-suivi').style.display = 'none';
+            document.getElementById('section-objectifs').style.display = 'block';
+            document.getElementById('panel-title').innerText = 'Configuration';
+            document.getElementById('panel-desc').innerText = 'Étape par étape.';
+            nextStep(1);
+        }
+
+        function initGoalsState() {
+            const savedGoals = loadGoals();
+            if (!savedGoals) {
+                return;
+            }
+
+            document.getElementById('targetWeight').value = savedGoals.targetWeight || '';
+            document.getElementById('sessionsGoal').value = savedGoals.sessionsGoal || '';
+            document.getElementById('sleepGoal').value = savedGoals.sleepGoal || '';
+
+            updateGoalsSummary(savedGoals);
+            switchToTrackingView();
+            restoreDailyFormForToday();
+        }
+
         function nextStep(step) {
             document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
@@ -251,16 +688,26 @@
         }
 
         function finishGoals() {
+            const targetWeight = document.getElementById('targetWeight').value.trim();
+            const sessionsGoal = document.getElementById('sessionsGoal').value.trim();
+            const sleepGoal = document.getElementById('sleepGoal').value.trim();
+
+            if (!targetWeight || !sessionsGoal || !sleepGoal) {
+                alert('Merci de remplir les 3 objectifs avant d\'enregistrer.');
+                return;
+            }
+
+            const goals = { targetWeight, sessionsGoal, sleepGoal };
+            saveGoals(goals);
+            updateGoalsSummary(goals);
+
             // Animation finale du cercle
             document.getElementById('circleProgress').style.strokeDashoffset = 0;
             document.getElementById('percText').innerText = "100%";
             
             // Switch d'interface
             setTimeout(() => {
-                document.getElementById('section-objectifs').style.display = 'none';
-                document.getElementById('section-suivi').style.display = 'block';
-                document.getElementById('panel-title').innerText = "Suivi Actif";
-                document.getElementById('panel-desc').innerText = "Semaine en cours";
+                switchToTrackingView();
             }, 600);
         }
 
@@ -273,6 +720,61 @@
         function showSport(show, el) {
             toggleSelect(el);
             document.getElementById('details-sport').style.display = show ? 'block' : 'none';
+        }
+
+        function saveDailyCheckin() {
+            const sleepHours = document.getElementById('dailySleepHours').value.trim();
+            const mood = getSelectedValue('mood');
+            const sportDone = getSelectedValue('sportDone');
+            const sportDetails = document.getElementById('dailySportDetails').value.trim();
+            const soreness = getSelectedValue('soreness');
+
+            if (!sleepHours || !mood || !sportDone) {
+                alert('Merci de compléter le suivi du jour (sommeil, humeur et sport).');
+                return;
+            }
+
+            if (sportDone === 'Oui' && !sportDetails) {
+                alert('Ajoutez un détail sur votre séance de sport.');
+                return;
+            }
+
+            const todayIso = toIsoDate(new Date());
+            const checkins = loadDailyCheckins();
+
+            checkins[todayIso] = {
+                sleepHours,
+                mood,
+                sportDone,
+                sportDetails,
+                soreness,
+                savedAt: new Date().toISOString()
+            };
+
+            saveDailyCheckins(checkins);
+            setDailyQuestionnaireVisibility(false);
+            updateDailyHeaderAndMessage(true);
+            showToast('Vos réponses du jour ont bien été sauvegardées.');
+        }
+
+        function resetTodayCheckin() {
+            const todayIso = toIsoDate(new Date());
+            const checkins = loadDailyCheckins();
+
+            if (checkins[todayIso]) {
+                delete checkins[todayIso];
+                saveDailyCheckins(checkins);
+            }
+
+            clearDailyForm();
+            setDailyQuestionnaireVisibility(true);
+            updateDailyHeaderAndMessage(false);
+        }
+
+        initGoalsState();
+
+        if (!loadGoals()) {
+            updateDailyHeaderAndMessage(false);
         }
     </script>
 </body>
