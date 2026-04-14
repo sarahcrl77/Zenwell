@@ -238,26 +238,44 @@
             position: relative;
         }
         .modal-body { padding: 40px; overflow-y: auto; }
-        .modal-grid { display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 220px; gap: 28px; align-items: start; }
         
         .coach-profile {
             background: var(--menthe);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 18px;
+            padding: 18px 12px;
             color: var(--obsidian);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 15px;
+            gap: 10px;
+            width: 100%;
+            max-width: 220px;
+            min-height: 248px;
+            justify-self: end;
+        }
+        .session-info-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 220px;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .session-info-layout .summary-box {
+            margin-bottom: 0;
+            align-self: center;
         }
         .coach-img {
-            width: 100px;
-            height: 100px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--obsidian);
             background-color: white;
+        }
+        .coach-profile h4 {
+            font-size: 1rem;
         }
 
         /* --- FORMS & BOOKING --- */
@@ -382,6 +400,8 @@
             h2 { font-size: 1.2rem; } 
             .modal-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; }
+            .session-info-layout { grid-template-columns: 1fr; }
+            .coach-profile { max-width: 100%; justify-self: stretch; }
         } 
     </style> 
 </head> 
@@ -647,12 +667,23 @@
                     </div>
                 </div>
 
-                <div id="sessionInfoFlow" style="display: none;">
-                    <h3 style="margin-bottom: 20px;">Infos de ma séance</h3>
-                    <div class="summary-box">
-                        <p><strong id="sessionInfoCourse">Cours</strong></p>
-                        <p style="margin-top: 10px;">Date : <span id="sessionInfoDate">-</span></p>
-                        <p>Heure : <span id="sessionInfoTime">-</span></p>
+                <div id="sessionInfoFlow" style="display: none; margin-top: 8px; padding-top: 12px;">
+                    <h3 style="margin: 0 0 20px;">Infos de ma séance</h3>
+                    <div class="session-info-layout">
+                        <div class="summary-box">
+                            <p><strong id="sessionInfoCourse">Cours</strong></p>
+                            <p style="margin-top: 10px;">Date : <span id="sessionInfoDate">-</span></p>
+                            <p>Heure : <span id="sessionInfoTime">-</span></p>
+                        </div>
+
+                        <div id="sessionCoachSection" class="coach-profile">
+                            <img src="" id="sessionCoachImg" class="coach-img" alt="Coach du cours">
+                            <div>
+                                <h4 id="sessionCoachName">Coach Name</h4>
+                                <p style="font-size: 0.74rem; opacity: 0.8;">Expert(e) Wellness</p>
+                            </div>
+                            <p style="font-size: 0.68rem; line-height: 1.45;">"Mon approche fusionne mouvement conscient et paix intérieure."</p>
+                        </div>
                     </div>
 
                     <div id="sessionEditBlock" style="display: none; margin-top: 20px;">
@@ -841,6 +872,9 @@
                     return;
                 }
 
+                const isFavorite = favButton.classList.contains('active');
+                card.classList.toggle('is-favorite', isFavorite);
+
                 if (card.closest('.upcoming')) {
                     actionButton.textContent = 'Voir ma séance';
                     actionButton.classList.remove('btn-primary');
@@ -854,7 +888,6 @@
 
                 actionButton.onclick = null;
 
-                const isFavorite = favButton.classList.contains('active');
                 const label = !isFavorite
                     ? 'Découvrir'
                     : (isSessionToday(card) ? 'Rejoindre' : 'Détails');
@@ -1019,6 +1052,9 @@
             document.getElementById('sessionInfoTime').innerText = sessionInfo.time;
             document.getElementById('sessionEditDate').value = sessionInfo.dateIso;
             document.getElementById('sessionEditTime').value = sessionInfo.timeIso;
+            document.getElementById('sessionCoachName').innerText = `Coach ${data.coach}`;
+            document.getElementById('sessionCoachImg').src = data.coachImg;
+            document.getElementById('sessionCoachSection').style.background = data.coachBg;
 
             document.getElementById('sessionEditBlock').style.display = 'none';
             document.getElementById('sessionSaveBtn').style.display = 'none';
