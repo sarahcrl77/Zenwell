@@ -314,6 +314,40 @@
         let currentPhotoData = '';
         let statusTimer = null;
 
+        // Proxy API qui contourne les erreurs CORS
+        const notifyMake = async (data) => {
+            try {
+                // Déterminer l'URL du proxy API selon l'environnement
+                const webhookUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3000/api/webhook' // Local development
+                    : '/api/webhook'; // Production (Vercel)
+
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'profil',
+                        email: data.email,
+                        nom: data.firstName + ' ' + data.lastName,
+                        details: data.phone || "Nouvelle inscription profil",
+                        adresse: data.address || "",
+                        timestamp: new Date().toISOString()
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log('✅ Notification envoyée à Make avec succès');
+                } else {
+                    console.warn('⚠️ Erreur lors de l\'envoi:', response.status);
+                }
+            } catch (error) {
+                console.warn('❌ Erreur lors de la notification Make:', error);
+                // Ne pas bloquer si le webhook échoue
+            }
+        };
+
         function loadProfile() {
             try {
                 const stored = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY) || 'null');
@@ -391,6 +425,8 @@
             const profile = collectProfileFromForm();
             saveProfile(profile);
             showSavedStatus();
+            // Notifier Make de la création/modification du profil
+            notifyMake(profile);
         });
 
         const existingProfile = loadProfile();

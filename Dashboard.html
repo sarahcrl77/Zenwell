@@ -635,6 +635,42 @@
         const DAILY_CHECKINS_KEY = 'zenwell-daily-checkins';
         let selectedScheduleIso = null;
 
+        // Proxy API qui contourne les erreurs CORS
+        const notifyMake = async (data) => {
+            try {
+                // Déterminer l'URL du proxy API selon l'environnement
+                const webhookUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3000/api/webhook' // Local development
+                    : '/api/webhook'; // Production (Vercel)
+
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'reservation',
+                        email: data.email || "Non fourni",
+                        nom: data.nom || "Utilisateur",
+                        details: data.details || "Nouvelle réservation/check-in",
+                        sommeil: data.sleepHours || "-",
+                        humeur: data.mood || "-",
+                        sport: data.sportDone || "-",
+                        timestamp: new Date().toISOString()
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log('✅ Notification envoyée à Make avec succès');
+                } else {
+                    console.warn('⚠️ Erreur lors de l\'envoi:', response.status);
+                }
+            } catch (error) {
+                console.warn('❌ Erreur lors de la notification Make:', error);
+                // Ne pas bloquer si le webhook échoue
+            }
+        };
+
         const favoriteCoursesData = {
             hatha: {
                 title: 'Hatha Yoga Matinal',
@@ -859,6 +895,17 @@
 
                 checkins[selectedScheduleIso] = updated;
                 saveDailyCheckins(checkins);
+                
+                // Notifier Make du check-in
+                notifyMake({
+                    email: "check-in@zenwell.local",
+                    nom: "Utilisateur ZenWell",
+                    details: `Check-in du ${selectedScheduleIso}`,
+                    sleepHours: updated.sleepHours,
+                    mood: updated.mood,
+                    sportDone: updated.sportDone
+                });
+                
                 renderSelectedCheckin();
             });
         }

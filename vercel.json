@@ -1,0 +1,12 @@
+{
+  "name": "Zenwell",
+  "version": 2,
+  "public": true,
+  "buildCommand": "",
+  "env": {
+    "MAKE_WEBHOOK_URL": {
+      "description": "URL du webhook Make pour les notifications de profil et réservations",
+      "example": "https://hook.eu1.make.com/71lfwmogmrsqdt6ydcied9vpg72ys0wm"
+    }
+  }
+}
