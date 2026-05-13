@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   try {
     // URL du webhook Make
-    const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/71lfwmogmrsqdt6ydcied9vpg72ys0wm';
+    const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/5men7erl9izahd2ykuqmqndb3vpc8j9g';
 
     // Faire la requête au webhook Make depuis le serveur
     const response = await fetch(MAKE_WEBHOOK_URL, {
