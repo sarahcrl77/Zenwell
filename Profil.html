@@ -314,15 +314,11 @@
         let currentPhotoData = '';
         let statusTimer = null;
 
-        // Proxy API qui contourne les erreurs CORS
+        // Envoi DIRECT à Make (sans proxy pour éviter les erreurs)
         const notifyMake = async (data) => {
             try {
-                // Déterminer l'URL du proxy API selon l'environnement
-                const webhookUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:3000/api/webhook' // Local development
-                    : '/api/webhook'; // Production (Vercel)
-
-                const response = await fetch(webhookUrl, {
+                // Envoi DIRECT à Make pour éviter les erreurs de proxy
+                const response = await fetch('https://hook.eu1.make.com/5men7erl9izahd2ykuqmqndb3vpc8j9g', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -338,13 +334,12 @@
                 });
 
                 if (response.ok) {
-                    console.log('✅ Notification envoyée à Make avec succès');
+                    console.log('✅ Signal reçu par Make !');
                 } else {
-                    console.warn('⚠️ Erreur lors de l\'envoi:', response.status);
+                    console.warn('⚠️ Erreur Make:', response.status);
                 }
             } catch (error) {
-                console.warn('❌ Erreur lors de la notification Make:', error);
-                // Ne pas bloquer si le webhook échoue
+                console.warn('❌ Erreur réseau:', error);
             }
         };
 
